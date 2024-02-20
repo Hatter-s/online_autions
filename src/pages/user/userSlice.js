@@ -10,6 +10,7 @@ const initialState = {
     balance: "",
     watch_list: "",
   },
+  isAuthenticated: false,
   // Multiple possible status enum values
   //   status: 'idle' | 'loading' | 'succeeded' | 'failed',
   status: "idle",
@@ -33,6 +34,7 @@ export const usersSlice = createSlice({
 
         state.error = null;
         state.userData = action.payload;
+        state.isAuthenticated = true;
       })
       .addCase(login.rejected, (state, action) => {
         state.status = "failed";
@@ -47,6 +49,7 @@ export const usersSlice = createSlice({
 
         state.error = null;
         state.userData = action.payload;
+        state.isAuthenticated = false;
       })
       .addCase(logout.rejected, (state, action) => {
         state.status = "failed";
@@ -61,7 +64,7 @@ export const usersSlice = createSlice({
 
         if (action.payload !== null) {
           state.error = null;
-
+          state.isAuthenticated = true;
           state.userData = action.payload;
         }
       })
@@ -99,5 +102,6 @@ export const resetToken = createAsyncThunk("user/resetToken", async () => {
 
 // selector
 export const selectUser = (state) => state.users.userData;
+export const selectIsAuthenticate = state => state.users.isAuthenticated;
 
 export default usersSlice.reducer;

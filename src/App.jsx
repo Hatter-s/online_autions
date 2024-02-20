@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
 import './App.css'
-import User from './pages/user/User'
 import { resetToken } from './pages/user/userSlice'
 import { useDispatch } from 'react-redux'
+import { RouterProvider } from 'react-router-dom'
+import router from '@/app/routes';
 
 function App() {
   const dispatch = useDispatch();
@@ -10,11 +11,11 @@ function App() {
   useEffect(() => {
     dispatch(resetToken());
     
-  }, [])
+  }, [dispatch])
   
   return (
     <>
-    <User />
+    <RouterProvider router={router} fallbackElement={<p>Initial Load...</p>} />
     </>
   )
 }

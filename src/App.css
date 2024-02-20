@@ -2,3 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+a {
+    @apply text-sky-700
+}
+
+a:hover {
+    @apply text-sky-500;
+}
