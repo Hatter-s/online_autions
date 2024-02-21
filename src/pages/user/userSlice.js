@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { loginAPI, logoutAPI, resetTokenAPI } from "@/api";
+import { loginAPI, logoutAPI, resetTokenAPI, registerAPI } from "@/api";
 
 const initialState = {
   userData: {
@@ -22,7 +22,7 @@ export const usersSlice = createSlice({
   name: "users",
   initialState,
   reducers: {
-    register: (state, action) => {},
+
   },
   extraReducers(builder) {
     builder
@@ -37,6 +37,19 @@ export const usersSlice = createSlice({
         state.isAuthenticated = true;
       })
       .addCase(login.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+
+      .addCase(register.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(register.fulfilled, (state) => {
+        state.status = "succeeded";
+
+        state.error = null;
+      })
+      .addCase(register.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       })
@@ -93,6 +106,10 @@ export const logout = createAsyncThunk("user/logout", async () => {
   };
 });
 
+export const register = createAsyncThunk("user/register", async (userRegister) => {
+  await registerAPI(userRegister);
+})
+
 export const resetToken = createAsyncThunk("user/resetToken", async () => {
   const response = await resetTokenAPI();
   return response;
@@ -101,7 +118,8 @@ export const resetToken = createAsyncThunk("user/resetToken", async () => {
 // reducer (action methods)
 
 // selector
-export const selectUser = (state) => state.users.userData;
+export const selectUser = state => state.users.userData;
 export const selectIsAuthenticate = state => state.users.isAuthenticated;
+export const selectStatus = state => state.users.status;
 
 export default usersSlice.reducer;

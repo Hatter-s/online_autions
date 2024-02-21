@@ -18,9 +18,10 @@ const Login = () => {
           <div className="absolute -inset-8 bg-white/95 -z-10 rounded-md shadow-md shadow-neutral-600"></div>
           <h1 className="text-center bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-400 ">Login</h1>
           <Form
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault();
-              dispatch(login({ username, password }));
+              await dispatch(login({ username, password }));
+              console.log(isAuthenticate)
               if (isAuthenticate) {
                 navigate("/");
               }
@@ -62,7 +63,7 @@ const Login = () => {
           </Form>
           <div className="flex justify-between mt-4 gap-4">
             <p>
-              Don&apos;t have account? sign up{" "}
+              Don&apos;t have account? Sign up {" "}
               <Link to={"/register"}>here</Link>
             </p>
           </div>

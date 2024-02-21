@@ -17,6 +17,24 @@ export const loginAPI = async (userLogin) => {
     };
 }
 
+export const registerAPI = async (userRegister) => {
+    const data = {
+        "username": userRegister.username,
+        "email": userRegister.email,
+        "emailVisibility": true,
+        "password": userRegister.password,
+        "passwordConfirm": userRegister.passwordConfirm,
+        "name": userRegister.username,
+        "balance": 0,
+        "watch_list": []
+    }
+    
+    const record = await pb.collection('users').create(data);
+
+    console.log(pb.authStore.isValid);
+    console.log(pb.authStore.token);
+}
+
 export const logoutAPI = async () => {
     pb.authStore.clear();
 }
