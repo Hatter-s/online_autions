@@ -7,13 +7,13 @@ import Register from "@/pages/user/Register";
 import Home from "@/pages/home/Home";
 import User from "@/pages/user/User";
 import ForgotPassword from "@/pages/user/ForgotPassword";
+import userRouter from "@/pages/user/user-router";
 
 const router = createBrowserRouter([
   {
     id: "root",
     path: "/",
     Component: Home,
-
   },
   {
     id: 'login',
@@ -29,6 +29,7 @@ const router = createBrowserRouter([
     id: 'user',
     path: "/user",
     Component: User,
+    children: userRouter
   },
   {
     id: 'forgotPassword',

@@ -23,21 +23,33 @@ function DefaultNavbar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav nav-end">
           <Nav className="me-auto flex items-center justify-between w-full">
-            <div className="flex">
-              <Link to={"/"} className="no-underline">
-                <Nav.Link>Home</Nav.Link>
+            <div className="flex gap-2 items-center">
+              <Link to={"/"} className="no-underline text-gray-700 hover:text-gray-500">
+                Home
               </Link>
-              <Nav.Link href="#link">Products</Nav.Link>
-              <Nav.Link href="#link">Products</Nav.Link>
+              <Link to={"/"} className="no-underline text-gray-700 hover:text-gray-500">
+                Home
+              </Link>
+              <Link to={"/"} className="no-underline text-gray-700 hover:text-gray-500">
+                Home
+              </Link>
             </div>
 
             {/* NOT LOGIN */}
             {!user.username && (
               <div className="">
-                <Button variant="outline-primary" className="mr-4 btn-sm" onClick={() => navigate('/login')}>
+                <Button
+                  variant="outline-primary"
+                  className="mr-4 btn-sm"
+                  onClick={() => navigate("/login")}
+                >
                   Login
                 </Button>
-                <Button variant="warning" className="btn-sm" onClick={() => navigate('/register')}>
+                <Button
+                  variant="warning"
+                  className="btn-sm"
+                  onClick={() => navigate("/register")}
+                >
                   Register
                 </Button>
               </div>
@@ -58,7 +70,7 @@ function DefaultNavbar() {
                       <div>{user.balance} $</div>
                     </div>
                   </NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.2">
+                  <NavDropdown.Item onClick={() => navigate("/user")}>
                     User Infomation
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
