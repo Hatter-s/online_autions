@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { loginAPI, logoutAPI, resetTokenAPI, registerAPI } from "@/api";
+import { loginAPI, logoutAPI, resetTokenAPI, registerAPI, updateUserInfoAPI, updateBalanceAPI } from "@/api";
 
 const initialState = {
   userData: {
@@ -7,9 +7,11 @@ const initialState = {
     username: "",
     email: "",
     avatar: "",
-    balance: "",
+    balance: 0,
     watch_list: "",
+    sell_list: "",
   },
+  displayBalanceModal: false,
   isAuthenticated: false,
   // Multiple possible status enum values
   //   status: 'idle' | 'loading' | 'succeeded' | 'failed',
@@ -22,7 +24,12 @@ export const usersSlice = createSlice({
   name: "users",
   initialState,
   reducers: {
-
+    openBalanceModal(state) {
+      state.displayBalanceModal = true;
+    },
+    closeBalanceModal(state) {
+      state.displayBalanceModal = false;
+    }
   },
   extraReducers(builder) {
     builder
@@ -84,7 +91,31 @@ export const usersSlice = createSlice({
       .addCase(resetToken.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
-      });
+      })
+
+      .addCase(updateUserInfo.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(updateUserInfo.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.userData = action.payload;
+      })
+      .addCase(updateUserInfo.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      
+      .addCase(updateBalance.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(updateBalance.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.userData = action.payload;
+      })
+      .addCase(updateBalance.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
   },
 });
 
@@ -115,11 +146,22 @@ export const resetToken = createAsyncThunk("user/resetToken", async () => {
   return response;
 });
 
-// reducer (action methods)
+export const updateUserInfo = createAsyncThunk("user/updateUserInfo", async ({userId, updateData}) => {
+  const response = await updateUserInfoAPI(userId, updateData);
+  return response;
+});
 
+export const updateBalance = createAsyncThunk("user/updateBalance", async ({userId, updateBalance}) => {
+  const response = await updateBalanceAPI(userId, updateBalance);
+  return response;
+});
+// reducer (action methods)
+export const { openBalanceModal, closeBalanceModal } = usersSlice.actions;
 // selector
 export const selectUser = state => state.users.userData;
 export const selectIsAuthenticate = state => state.users.isAuthenticated;
 export const selectStatus = state => state.users.status;
+export const selectBalanceModalStatus = state => state.users.displayBalanceModal;
+export const selectError = state => state.users.error;
 
 export default usersSlice.reducer;

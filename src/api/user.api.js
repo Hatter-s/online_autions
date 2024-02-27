@@ -13,7 +13,8 @@ export const loginAPI = async (userLogin) => {
         email: userData.email,
         avatar: userData.avatar,
         balance: userData.balance,
-        watch_list: userData.watch_list
+        watch_list: userData.watch_list,
+        sell_list: userData.sell_list
     };
 }
 
@@ -24,15 +25,13 @@ export const registerAPI = async (userRegister) => {
         "emailVisibility": true,
         "password": userRegister.password,
         "passwordConfirm": userRegister.passwordConfirm,
-        "name": userRegister.username,
         "balance": 0,
-        "watch_list": []
+        "watch_list": [],
+        "sell_list": [],
     }
     
     const record = await pb.collection('users').create(data);
 
-    console.log(pb.authStore.isValid);
-    console.log(pb.authStore.token);
 }
 
 export const logoutAPI = async () => {
@@ -50,11 +49,39 @@ export const resetTokenAPI = async () => {
             email: userData.email,
             avatar: userData.avatar,
             balance: userData.balance,
-            watch_list: userData.watch_list
+            watch_list: userData.watch_list,
+            sell_list: userData.sell_list
         };
     }
 
     return null;
+}
+
+export const updateUserInfoAPI = async (userId, updateData) => {
+
+    const record = await pb.collection('users').update(userId, updateData);
+    return {
+        id: record.id,
+        username: record.username,
+        email: record.email,
+        avatar: record.avatar,
+        balance: record.balance,
+        watch_list: record.watch_list,
+        sell_list: record.sell_list
+    };
+}
+
+export const updateBalanceAPI = async (userId, updateBalance) => {
+    const record = await pb.collection('users').update(userId, updateBalance);
+    return {
+        id: record.id,
+        username: record.username,
+        email: record.email,
+        avatar: record.avatar,
+        balance: record.balance,
+        watch_list: record.watch_list,
+        sell_list: record.sell_list
+    }
 }
 
 // after the above you can also access the auth data from the authStore
