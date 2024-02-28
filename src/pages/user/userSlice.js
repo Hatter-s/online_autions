@@ -8,8 +8,8 @@ const initialState = {
     email: "",
     avatar: "",
     balance: 0,
-    watch_list: "",
-    sell_list: "",
+    watch_list: [],
+    sell_list: [],
   },
   displayBalanceModal: false,
   isAuthenticated: false,
@@ -163,5 +163,6 @@ export const selectIsAuthenticate = state => state.users.isAuthenticated;
 export const selectStatus = state => state.users.status;
 export const selectBalanceModalStatus = state => state.users.displayBalanceModal;
 export const selectError = state => state.users.error;
+export const selectSellProducts = state => state.users.userData.sell_list;
 
 export default usersSlice.reducer;

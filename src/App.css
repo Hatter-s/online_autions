@@ -9,3 +9,7 @@ a {
 a:hover {
     @apply text-sky-500;
 }
+
+h1[unique-attr] {
+    @apply text-gray-600 mt-10 mb-10;
+}

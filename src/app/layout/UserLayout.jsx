@@ -1,6 +1,6 @@
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import UserSidebar from "./UserSidebar";
+import UserSidebar from "./UserSidebar/UserSidebar";
 
 const UserLayout = ({ children }) => {
   return (

@@ -8,6 +8,8 @@ import Home from "@/pages/home/Home";
 import User from "@/pages/user/User";
 import ForgotPassword from "@/pages/user/ForgotPassword";
 import userRouter from "@/pages/user/user-router";
+import productsRouter from "@/pages/products/products-router";
+import ProductsLayout from "@/pages/products/ProductLayout";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +37,12 @@ const router = createBrowserRouter([
     id: 'forgotPassword',
     path: "/forgot-password",
     Component: ForgotPassword
+  },
+  {
+    id: 'products',
+    path: "/products",
+    Component: ProductsLayout,
+    children: productsRouter
   }
 ]);
 
