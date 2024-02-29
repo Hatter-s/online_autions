@@ -9,7 +9,7 @@ const initialState = {
 };
 
 export const alertSlice = createSlice({
-  name: "users",
+  name: "alert",
   initialState,
   reducers: {
     triggerAlert(state, action) {

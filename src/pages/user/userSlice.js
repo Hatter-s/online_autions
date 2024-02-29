@@ -162,7 +162,7 @@ export const selectUser = state => state.users.userData;
 export const selectIsAuthenticate = state => state.users.isAuthenticated;
 export const selectStatus = state => state.users.status;
 export const selectBalanceModalStatus = state => state.users.displayBalanceModal;
-export const selectError = state => state.users.error;
+export const selectUsersError = state => state.users.error;
 export const selectSellProducts = state => state.users.userData.sell_list;
 
 export default usersSlice.reducer;

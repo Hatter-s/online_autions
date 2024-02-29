@@ -27,8 +27,8 @@ function DefaultNavbar() {
               <Link to={"/"} className="no-underline text-gray-700 hover:text-gray-500">
                 Home
               </Link>
-              <Link to={"/"} className="no-underline text-gray-700 hover:text-gray-500">
-                Home
+              <Link to={"/products"} className="no-underline text-gray-700 hover:text-gray-500">
+                Products
               </Link>
               <Link to={"/"} className="no-underline text-gray-700 hover:text-gray-500">
                 Home

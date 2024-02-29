@@ -1,22 +1,18 @@
 import pb from "./config";
 
-export const loginAPI = async (userLogin) => {
-    const authData = await pb.collection('users').authWithPassword(
-        userLogin.username,
-        userLogin.password,
-    );
-    const userData = authData.record;
+export const addProductAPI = async (productData) => {
+  const data = {
+    "name": productData.name,
+    "description": productData.description,
+    "is_fix_price": productData.is_fix_price,
+    "minium_price": productData.minium_price,
+    "seller": productData.seller,
+    "product_image": productData.product_image,
+  };
 
-    return {
-        id: userData.id,
-        username: userData.username,
-        email: userData.email,
-        avatar: userData.avatar,
-        balance: userData.balance,
-        watch_list: userData.watch_list,
-        sell_list: userData.sell_list
-    };
-}
+  const record = await pb.collection("products").create(data);
+  return record;
+};
 
 // after the above you can also access the auth data from the authStore
 // console.log(pb.authStore.isValid);
