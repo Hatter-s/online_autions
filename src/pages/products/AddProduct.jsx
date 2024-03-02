@@ -39,6 +39,7 @@ const AddProduct = () => {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(1);
   const [fixPrice, setFixPrice] = useState(false);
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -50,6 +51,7 @@ const AddProduct = () => {
       minium_price: Number(price),
       seller: user.id,
       product_image: imageFile,
+      categories: category
     };
 
     dispatch(addProduct(productData));
@@ -113,8 +115,8 @@ const AddProduct = () => {
               Choose category
             </option>
             {categories.map((category) => (
-              <option key={category} value={category}>
-                {category}
+              <option key={category.id} value={category.id}>
+                {category.name}
               </option>
             ))}
           </Form.Select>

@@ -13,7 +13,9 @@ const initialState = {
 export const categoriesSlice = createSlice({
   name: "categories",
   initialState,
-  reducers: {},
+  reducers: {
+
+  },
   extraReducers(builder) {
     builder
       .addCase(addCategory.pending, (state) => {
@@ -56,7 +58,7 @@ export const getAllCategories = createAsyncThunk(
   "products/getAllCategories",
   async (productData) => {
     const response = await getAllCategoriesAPI(productData);
-    const categories = response.map((category) => category.name);
+    const categories = response.map((category) => ({name: category.name, id: category.id}));
 
     return categories;
   }

@@ -33,9 +33,10 @@ name: "products",
     .addCase(addProduct.pending, (state) => {
       state.status = "loading";
     })
-    .addCase(addProduct.fulfilled, (state) => {
+    .addCase(addProduct.fulfilled, (state, action) => {
       state.status = "succeeded";
       state.addProductSuccess = true;
+      state.products = [ ...state.products, action.payload ];
       state.error = null;
     })
     .addCase(addProduct.rejected, (state, action) => {

@@ -12,7 +12,7 @@ export const getAllProductsAPI = async (sort = "created") => {
     is_fix_price: product.is_fix_price,
     minium_price: product.minium_price,
     seller: product.seller,
-    category: product.category,
+    category: product.categories,
   }))
 
   return products;
@@ -28,7 +28,7 @@ export const getProductByIdAPI = async (productId) => {
     is_fix_price: record.is_fix_price,
     minium_price: record.minium_price,
     seller: record.seller,
-    category: record.category,
+    category: record.categories,
   }
   
   return product;
@@ -46,7 +46,18 @@ export const addProductAPI = async (productData) => {
   };
 
   const record = await pb.collection("products").create(data);
-  return record;
+  const product = {
+    id: record.id,
+    product_image: record.product_image,
+    name: record.name,
+    description: record.description,
+    is_fix_price: record.is_fix_price,
+    minium_price: record.minium_price,
+    seller: record.seller,
+    category: record.category,
+  }
+
+  return product;
 };
 
 // after the above you can also access the auth data from the authStore
