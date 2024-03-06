@@ -17,20 +17,29 @@ function DefaultNavbar() {
   return (
     <Navbar expand="lg" sticky="top" className="bg-gradient-to-r from-blue-400">
       <Container>
-        <Navbar.Brand href="#home" className="text-white">
-          Onl-Auc
+        <Navbar.Brand href="" className="text-white">
+          <Link to={"/"} className="text-white no-underline">Onl-Auc</Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav nav-end">
           <Nav className="me-auto flex items-center justify-between w-full">
             <div className="flex gap-2 items-center">
-              <Link to={"/"} className="no-underline text-gray-700 hover:text-gray-500">
+              <Link
+                to={"/"}
+                className="no-underline text-gray-700 hover:text-gray-500"
+              >
                 Home
               </Link>
-              <Link to={"/products"} className="no-underline text-gray-700 hover:text-gray-500">
+              <Link
+                to={"/products"}
+                className="no-underline text-gray-700 hover:text-gray-500"
+              >
                 Products
               </Link>
-              <Link to={"/"} className="no-underline text-gray-700 hover:text-gray-500">
+              <Link
+                to={"/"}
+                className="no-underline text-gray-700 hover:text-gray-500"
+              >
                 Home
               </Link>
             </div>

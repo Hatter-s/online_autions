@@ -31,7 +31,7 @@ export const registerAPI = async (userRegister) => {
     }
     
     const record = await pb.collection('users').create(data);
-
+    return record;
 }
 
 export const logoutAPI = async () => {

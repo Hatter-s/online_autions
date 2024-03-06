@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { Form } from "react-bootstrap";
@@ -8,19 +8,42 @@ import {
   toggleOfferModal,
   selectCurrentProduct,
 } from "../productsSlice";
-import { selectUser } from "@/pages/user/userSlice";
+import { addOrder, selectOrderStatus, resetOrdersCurrentProcess } from "@/app/slice/ordersSlice";
+import { selectUser, updateBalance, selectUserStatus, resetUserCurrentProcess } from "@/pages/user/userSlice";
 
 function OfferModal() {
   const dispatch = useDispatch();
   const displayOfferModal = useSelector(selectDisplayOfferModal);
   const currentProduct = useSelector(selectCurrentProduct);
   const currentUser = useSelector(selectUser);
+  const orderStatus = useSelector(selectOrderStatus);
+  const userStatus = useSelector(selectUserStatus);
+
+  const [offerPrice, setOfferPrice] = useState(0);
+
+  const closeModal = useCallback(() => {
+    dispatch(toggleOfferModal())
+  }, [dispatch]);
 
   useEffect(() => {
     setOfferPrice(currentProduct.minium_price);
   }, [currentProduct])
+
+  useEffect(() => {
+    if(orderStatus.status === 'succeeded' && orderStatus.currentProcess === 'add-order' ) {
+      dispatch(resetOrdersCurrentProcess());
+      dispatch(updateBalance({userId: currentUser.id, updateBalance: {balance: currentUser.balance - offerPrice }}))
+    } 
+  }, [orderStatus, dispatch, currentUser, offerPrice])
+
+  useEffect(() =>{
+    console.log(userStatus);
+    if(userStatus.status === 'succeeded' && userStatus.currentProcess === 'update-balance' ) {
+      dispatch(resetUserCurrentProcess());
+      closeModal();
+    }
+  }, [dispatch, closeModal, userStatus])
   
-  const [offerPrice, setOfferPrice] = useState(0);
 
   const checkOfferValid = (offerPrice) => {
     if (
@@ -33,23 +56,31 @@ function OfferModal() {
     return true;
   };
 
-  const closeModal = () => {
-    dispatch(toggleOfferModal())
-  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (checkOfferValid(offerPrice)) {
+      const orderData = {
+        buyer_id: currentUser.id,
+        seller_id: currentProduct.seller,
+        product_id: currentProduct.id,
+        offer_price: offerPrice,
+        is_fix_price: currentProduct.is_fix_price,
+        is_accept: false
+      }
+      dispatch(addOrder(orderData));
+    }
+  }
+
+
   return (
-    <Modal show={displayOfferModal} onHide={closeModal}>
+    <Modal show={displayOfferModal} onHide={closeModal} >
       <Modal.Header closeButton>
         <Modal.Title>Make Offer</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form
           id="makeOffer"
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (checkOfferValid(offerPrice)) {
-              closeModal();
-            }
-          }}
+          onSubmit={(e) => handleSubmit(e)}
         >
           <Form.Group
             className=" flex flex-row items-center gap-4 justify-center"

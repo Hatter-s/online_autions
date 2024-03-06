@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createSelector } from "@reduxjs/toolkit";
 import { loginAPI, logoutAPI, resetTokenAPI, registerAPI, updateUserInfoAPI, updateBalanceAPI } from "@/api";
 
 const initialState = {
@@ -11,6 +11,8 @@ const initialState = {
     watch_list: [],
     sell_list: [],
   },
+  // Process available: login, register, logout, update-product, update-balance
+  currentProcess: null,
   displayBalanceModal: false,
   isAuthenticated: false,
   // Multiple possible status enum values
@@ -24,6 +26,9 @@ export const usersSlice = createSlice({
   name: "users",
   initialState,
   reducers: {
+    resetUserCurrentProcess(state) {
+      state.currentProcess = null;
+    },
     openBalanceModal(state) {
       state.displayBalanceModal = true;
     },
@@ -107,6 +112,7 @@ export const usersSlice = createSlice({
       
       .addCase(updateBalance.pending, (state) => {
         state.status = "loading";
+        state.currentProcess = "update-balance";
       })
       .addCase(updateBalance.fulfilled, (state, action) => {
         state.status = "succeeded";
@@ -125,7 +131,7 @@ export const login = createAsyncThunk("users/login", async (userLogin) => {
   return response;
 });
 
-export const logout = createAsyncThunk("user/logout", async () => {
+export const logout = createAsyncThunk("users/logout", async () => {
   logoutAPI();
   return {
     id: 0,
@@ -137,32 +143,45 @@ export const logout = createAsyncThunk("user/logout", async () => {
   };
 });
 
-export const register = createAsyncThunk("user/register", async (userRegister) => {
+export const register = createAsyncThunk("users/register", async (userRegister) => {
   await registerAPI(userRegister);
 })
 
-export const resetToken = createAsyncThunk("user/resetToken", async () => {
+export const resetToken = createAsyncThunk("users/resetToken", async () => {
   const response = await resetTokenAPI();
   return response;
 });
 
-export const updateUserInfo = createAsyncThunk("user/updateUserInfo", async ({userId, updateData}) => {
+export const updateUserInfo = createAsyncThunk("users/updateUserInfo", async ({userId, updateData}) => {
   const response = await updateUserInfoAPI(userId, updateData);
   return response;
 });
 
-export const updateBalance = createAsyncThunk("user/updateBalance", async ({userId, updateBalance}) => {
+export const updateBalance = createAsyncThunk("users/updateBalance", async ({userId, updateBalance}) => {
   const response = await updateBalanceAPI(userId, updateBalance);
   return response;
 });
 // reducer (action methods)
-export const { openBalanceModal, closeBalanceModal } = usersSlice.actions;
+export const { openBalanceModal, closeBalanceModal, resetUserCurrentProcess } = usersSlice.actions;
 // selector
 export const selectUser = state => state.users.userData;
 export const selectIsAuthenticate = state => state.users.isAuthenticated;
-export const selectStatus = state => state.users.status;
 export const selectBalanceModalStatus = state => state.users.displayBalanceModal;
 export const selectUsersError = state => state.users.error;
 export const selectSellProducts = state => state.users.userData.sell_list;
+export const selectStatus = state => state.users.status;
+export const selectCurrentProcess = (state) => state.users.currentProcess;
+
+export const selectUserStatus = createSelector(
+  selectStatus,
+  selectCurrentProcess,
+  (status, currentProcess) => {
+    return {
+      status,
+      currentProcess,
+    };
+  }
+);
+
 
 export default usersSlice.reducer;

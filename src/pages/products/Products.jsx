@@ -15,8 +15,6 @@ const Products = () => {
   const products = useSelector(selectProducts);
   const categories = useSelector(selectAllCategories);
 
-
-
   if (products.length === 0) {
     return (
       <div className="my-10">
@@ -30,7 +28,7 @@ const Products = () => {
   return (
     <div className="my-10">
       <h1 className="mb-10">Products page</h1>
-      <Row xs={1} md={2} lg={3} xl={4} className="g-4 items-stretch">
+      <Row xs={1} sm={1} md={2} lg={3} xl={4} className="g-4 items-stretch">
         {products.map((product) => (
           <Col key={product.id} className="flex flex-col">
             <Card className="flex-1">

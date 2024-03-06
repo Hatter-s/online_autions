@@ -2,8 +2,7 @@ import Form from "react-bootstrap/Form";
 import { useState, useEffect } from "react";
 import {
   addProduct,
-  selectAddProductSuccess,
-  resetAddProductSuccess,
+  selectProductStatus,
 } from "./productsSlice";
 import ButtonPrimary from "@/components/UI/ButtonPrimary";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,14 +18,12 @@ const AddProduct = () => {
 
   const categories = useSelector(selectAllCategories);
   const user = useSelector(selectUser);
-  const addProductSuccess = useSelector(selectAddProductSuccess);
-
+  const addProductStatus = useSelector(selectProductStatus)
   useEffect(() => {
-    if (addProductSuccess) {
-      dispatch(resetAddProductSuccess());
+    if (addProductStatus.currentProcess === 'add-product' && addProductStatus.status === 'succeeded') {
         navigate("/products");
     }
-  }, [addProductSuccess, dispatch, navigate]);
+  }, [addProductStatus, dispatch, navigate]);
 
   const [category, setCategory] = useState("label");
   const [name, setName] = useState("");
