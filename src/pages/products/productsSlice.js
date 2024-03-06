@@ -15,6 +15,7 @@ const initialState = {
   addProductSuccess: null,
   // Multiple possible status enum values
   //   status: 'idle' | 'loading' | 'succeeded' | 'failed',
+  displayOfferModal: false,
   status: "idle",
   //error: null | string
   error: null,
@@ -26,6 +27,9 @@ name: "products",
   reducers: {
     resetAddProductSuccess(state) {
       state.addProductSuccess = null;
+    },
+    toggleOfferModal(state) {
+      state.displayOfferModal = !state.displayOfferModal;
     }
   },
   extraReducers(builder) {
@@ -72,6 +76,7 @@ name: "products",
     })
   },
 });
+
 //thunk
 export const getProductById = createAsyncThunk("products/getProductById", async (productId) => {
   const response = await getProductByIdAPI(productId) ;
@@ -89,11 +94,12 @@ export const addProduct = createAsyncThunk("products/addProduct", async (product
 });
 
 // reducer (action methods)
-export const { resetAddProductSuccess } = productsSlice.actions;
+export const { resetAddProductSuccess, toggleOfferModal } = productsSlice.actions;
 // selector
 export const selectCurrentProduct = state => state.products.currentProduct;
 export const selectProducts = state => state.products.products;
 export const selectProductsError = state => state.products.error;
 export const selectAddProductSuccess = state => state.products.addProductSuccess;
+export const selectDisplayOfferModal = state => state.products.displayOfferModal;
 
 export default productsSlice.reducer;

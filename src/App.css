@@ -13,3 +13,7 @@ a:hover {
 h1[unique-attr] {
     @apply text-gray-600 mt-10 mb-10;
 }
+
+.text-pri-grad {
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-200
+}

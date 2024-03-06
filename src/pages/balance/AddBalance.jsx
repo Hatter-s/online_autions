@@ -35,7 +35,6 @@ function AddBalance() {
                 <Form.Label className="mb-0">Add: </Form.Label>
                 <Form.Control type="number" value={balance} onChange={(e) => setBalance(e.target.value)} className="text-end max-w-24" min={1}/>
               </Form.Group>
-              <input type="submit" id="submit-form" className="hidden" />
             </Form>
           </Modal.Body>
           <Modal.Footer>
