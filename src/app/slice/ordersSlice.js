@@ -5,14 +5,13 @@ import {
 } from "@reduxjs/toolkit";
 import {
   addOrderAPI,
-  // getAllProductsAPI,
-  // getProductByIdAPI,
-  // updateProductAPI,
+  getOrdersBySellerIdAPI,
+  getOrdersByBuyerIdAPI,
 } from "@/api";
 
 const initialState = {
   sellerOrders: [],
-  userOrders: [],
+  buyerOrders: [],
   currentOrder: {
     id: "",
     created: "",
@@ -85,29 +84,50 @@ export const ordersSlice = createSlice({
       //   state.error = action.error.message;
       // })
 
-      // .addCase(getProductById.pending, (state) => {
-      //   state.status = "loading";
-      // })
-      // .addCase(getProductById.fulfilled, (state, action) => {
-      //   state.status = "succeeded";
-      //   state.currentProduct = action.payload;
-      //   state.error = null;
-      // })
-      // .addCase(getProductById.rejected, (state, action) => {
-      //   state.status = "failed";
-      //   state.error = action.error.message;
-      // });
+      .addCase(getOrdersBySellerId.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getOrdersBySellerId.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.sellerOrders = action.payload;
+        state.error = null;
+      })
+      .addCase(getOrdersBySellerId.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+
+      .addCase(getOrdersByBuyerId.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getOrdersByBuyerId.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.buyerOrders = action.payload;
+        state.error = null;
+      })
+      .addCase(getOrdersByBuyerId.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      });
   },
 });
 
 //thunk
-// export const getProductById = createAsyncThunk(
-//   "products/getProductById",
-//   async (productId) => {
-//     const response = await getProductByIdAPI(productId);
-//     return response;
-//   }
-// );
+export const getOrdersBySellerId = createAsyncThunk(
+  "orders/getOrdersBySellerId",
+  async (sellerId) => {
+    const response = await getOrdersBySellerIdAPI(sellerId);
+    return response;
+  }
+);
+
+export const getOrdersByBuyerId = createAsyncThunk(
+  "orders/getOrdersByBuyerId",
+  async (buyerId) => {
+    const response = await getOrdersByBuyerIdAPI(buyerId);
+    return response;
+  }
+);
 
 // export const getAllProducts = createAsyncThunk(
 //   "products/getAllProducts",
@@ -139,7 +159,7 @@ export const { resetOrdersCurrentProcess } = ordersSlice.actions;
 // selector
 export const selectCurrentOrder = (state) => state.orders.currentProduct;
 export const selectSellerOrders = (state) => state.orders.sellerOrders;
-export const selectUserOrders = (state) => state.orders.sellerUsers;
+export const selectBuyerOrders = (state) => state.orders.buyerOrders;
 export const selectOrdersError = (state) => state.orders.error;
 
 export const selectStatus = (state) => state.orders.status;

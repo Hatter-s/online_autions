@@ -183,5 +183,7 @@ export const selectUserStatus = createSelector(
   }
 );
 
+export const selectUserId = createSelector(selectUser, (user) => user.id)
+
 
 export default usersSlice.reducer;

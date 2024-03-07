@@ -78,8 +78,8 @@ const Product = () => {
 
   return (
     <div className="my-10">
-      <OfferModal />
-      <Row sm={1} md={2} xl={2}>
+      <OfferModal isFixPrice={product.is_fix_price}/>
+      <Row xs={1} sm={1} md={2} xl={2}>
         <Col>
           <img
             src={`${import.meta.env.VITE_FILE_URL}/products/${product.id}/${
@@ -125,7 +125,7 @@ const Product = () => {
                 </p>
               </div>
               <div className="flex gap-2">
-                <Button>Buy</Button>
+                <Button onClick={() => dispatch(toggleOfferModal())}>Buy</Button>
                 <Button variant="outline-primary">
                   <div className="flex flex-row gap-1 items-center">
                     <Cart /> Add to watch list

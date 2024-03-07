@@ -9,7 +9,9 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(resetToken());
+    if(dispatch) {
+      dispatch(resetToken());
+    }
     
   }, [dispatch])
   

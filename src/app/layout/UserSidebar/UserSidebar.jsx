@@ -9,7 +9,7 @@ const UserSidebar = () => {
             General Information
             </NavLink>
             <NavLink className={({isActive}) => ((isActive ? "active" : "") + " nav-linkk")} to="sell-products">Sell products</NavLink>
-            <NavLink className={({isActive}) => ((isActive ? "active" : "") + " nav-linkk")}>Order</NavLink>
+            <NavLink className={({isActive}) => ((isActive ? "active" : "") + " nav-linkk")} to={"orders"}>Orders</NavLink>
             <NavLink className={({isActive}) => ((isActive ? "active" : "") + " nav-linkk")}>Watch list</NavLink>
             <NavLink className={({isActive}) => ((isActive ? "active" : "") + " nav-linkk")}>Change password</NavLink>
         </nav>

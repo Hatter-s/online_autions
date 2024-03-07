@@ -1,7 +1,7 @@
 import Form from "react-bootstrap/Form";
 import { login, selectIsAuthenticate } from "./userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -10,6 +10,14 @@ const Login = () => {
   const isAuthenticate = useSelector(selectIsAuthenticate);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    if (isAuthenticate) {
+      navigate("/");
+    }
+  
+  }, [isAuthenticate, navigate])
+  
 
   return (
     <>
@@ -20,11 +28,7 @@ const Login = () => {
           <Form
             onSubmit={async (e) => {
               e.preventDefault();
-              await dispatch(login({ username, password }));
-              console.log(isAuthenticate)
-              if (isAuthenticate) {
-                navigate("/");
-              }
+              dispatch(login({ username, password }));
             }}
           >
             <Form.Group className="mb-3" controlId="formBasicEmail">

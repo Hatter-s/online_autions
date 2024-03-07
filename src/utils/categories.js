@@ -1,8 +1,8 @@
-export const getCategoryById = (categories,categoryId) => {
-    const category =  categories.find(category => category.id === categoryId);
+export const getCategoryById = (categories, categoryId) => {
+  const category = categories.find((category) => category.id === categoryId);
 
-    if (!category) {
-      return
-    }
-    return category.name;
+  if (!category) {
+    return;
   }
+  return category.name;
+};

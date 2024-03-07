@@ -9,17 +9,43 @@ export const addOrderAPI = async (orderData) => {
 export const getOrdersBySellerIdAPI = async (sellerId) => {
   // fetch a paginated records list
   const resultList = await pb.collection("orders").getList(1, 50, {
-    filter: "seller_id =" + sellerId,
+    filter: `seller_id = "${sellerId}"`,
   });
 
-  return resultList;
+//   const resultList = await pb.collection('orders').getFullList({
+//     sort: '-created',
+// });
+  
+  const sellerOrders = resultList.items.map(order => ({
+    id: order.id,
+    created: order.created,
+    updated: order.updated,
+    buyer_id: order.buyer_id,
+    seller_id: order.seller_id,
+    product_id: order.product_id,
+    offer_price: order.offer_price,
+    is_fix_price: order.is_fix_price,
+    is_accept: order.is_accept,
+  }))  
+  return sellerOrders;
 };
 
-export const getOrdersByUserIdAPI = async (userId) => {
+export const getOrdersByBuyerIdAPI = async (buyerId) => {
   const resultList = await pb.collection("orders").getList(1, 50, {
-    filter: "seller_id =" + userId,
+    filter: "buyer_id =" + buyerId,
   });
 
-  return resultList;
+  const buyerOrders = resultList.items.map(order => ({
+    id: order.id,
+    created: order.created,
+    updated: order.updated,
+    buyer_id: order.buyer_id,
+    seller_id: order.seller_id,
+    product_id: order.product_id,
+    offer_price: order.offer_price,
+    is_fix_price: order.is_fix_price,
+    is_accept: order.is_accept,
+  }))  
+  return buyerOrders;
 };
 
