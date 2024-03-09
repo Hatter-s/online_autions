@@ -35,8 +35,8 @@ function OfferModal(props) {
   }, [dispatch]);
 
   useEffect(() => {
-    setOfferPrice(currentProduct.minium_price);
-  }, [currentProduct]);
+    setOfferPrice(props.someName.offer_price);
+  }, [props.someName]);
 
   useEffect(() => {
     if (
@@ -113,7 +113,7 @@ function OfferModal(props) {
               value={offerPrice}
               onChange={(e) => setOfferPrice(e.target.value)}
               className="text-end max-w-24"
-              min={currentProduct.minium_price}
+              min={props.someName.offer_price}
               disabled={props.isFixPrice}
             />
           </Form.Group>

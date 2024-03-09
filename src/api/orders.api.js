@@ -12,11 +12,11 @@ export const getOrdersBySellerIdAPI = async (sellerId) => {
     filter: `seller_id = "${sellerId}"`,
   });
 
-//   const resultList = await pb.collection('orders').getFullList({
-//     sort: '-created',
-// });
-  
-  const sellerOrders = resultList.items.map(order => ({
+  //   const resultList = await pb.collection('orders').getFullList({
+  //     sort: '-created',
+  // });
+
+  const sellerOrders = resultList.items.map((order) => ({
     id: order.id,
     created: order.created,
     updated: order.updated,
@@ -26,7 +26,7 @@ export const getOrdersBySellerIdAPI = async (sellerId) => {
     offer_price: order.offer_price,
     is_fix_price: order.is_fix_price,
     is_accept: order.is_accept,
-  }))  
+  }));
   return sellerOrders;
 };
 
@@ -35,7 +35,7 @@ export const getOrdersByBuyerIdAPI = async (buyerId) => {
     filter: "buyer_id =" + buyerId,
   });
 
-  const buyerOrders = resultList.items.map(order => ({
+  const buyerOrders = resultList.items.map((order) => ({
     id: order.id,
     created: order.created,
     updated: order.updated,
@@ -45,7 +45,14 @@ export const getOrdersByBuyerIdAPI = async (buyerId) => {
     offer_price: order.offer_price,
     is_fix_price: order.is_fix_price,
     is_accept: order.is_accept,
-  }))  
+  }));
   return buyerOrders;
 };
 
+export const getOrderByProductIdAPI = async (productId) => {
+  const resultList = await pb.collection("ordersView").getList(1, 50, {
+    filter: `product_id = "${productId}" `,
+  });
+
+  return resultList.items[0];
+};

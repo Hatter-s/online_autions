@@ -5,6 +5,7 @@ const initialState = {
   userData: {
     id: 0,
     username: "",
+    name: "",
     email: "",
     avatar: "",
     balance: 0,
@@ -54,11 +55,11 @@ export const usersSlice = createSlice({
       })
 
       .addCase(register.pending, (state) => {
+        state.currentProcess = "register";
         state.status = "loading";
       })
       .addCase(register.fulfilled, (state) => {
         state.status = "succeeded";
-
         state.error = null;
       })
       .addCase(register.rejected, (state, action) => {

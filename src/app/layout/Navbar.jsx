@@ -6,11 +6,12 @@ import Button from "react-bootstrap/Button";
 import { Heart } from "react-bootstrap-icons";
 
 import { useSelector, useDispatch } from "react-redux";
-import { selectUser, logout } from "../../pages/user/userSlice";
+import { selectUser, logout, selectIsAuthenticate } from "../../pages/user/userSlice";
 import { Link, useNavigate } from "react-router-dom";
 
 function DefaultNavbar() {
   const user = useSelector(selectUser);
+  const isAuthenticated = useSelector(selectIsAuthenticate);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -45,7 +46,7 @@ function DefaultNavbar() {
             </div>
 
             {/* NOT LOGIN */}
-            {!user.username && (
+            {!isAuthenticated && (
               <div className="">
                 <Button
                   variant="outline-primary"
@@ -65,12 +66,12 @@ function DefaultNavbar() {
             )}
 
             {/* WAS LOGIN */}
-            {user.username && (
+            {isAuthenticated && (
               <div className="flex gap-2 justify-start items-center">
                 <div className="wishlist">
                   <Heart />
                 </div>
-                <NavDropdown title={user.username} id="basic-nav-dropdown">
+                <NavDropdown title={user.name} id="basic-nav-dropdown">
                   <NavDropdown.Item>
                     <div className="flex justify-between items-center">
                       <Button variant="outline-primary" className="btn-sm">

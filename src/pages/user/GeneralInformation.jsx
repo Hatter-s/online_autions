@@ -12,23 +12,28 @@ const GeneralInformation = () => {
   useEffect(() => {
     setUsername(user.username);
     setEmail(user.email);
-  }, [user.username, user.email]);
+    setName(user.name);
+  }, [user.username, user.email, user.name]);
 
   const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
   return (
     <>
       <div className="mt-10">
-        <h1 className="mb-10">Hello {user.username}</h1>
+        <h1 className="mb-10">Hello {user.name}</h1>
         <form
           onSubmit={(e) => {
             e.preventDefault();
             dispatch(
-              updateUserInfo({userId: user.id,updateData: {
-                username,
-                email,
-              }})
+              updateUserInfo({
+                userId: user.id,
+                updateData: {
+                  name,
+                  email,
+                },
+              })
             );
           }}
         >
@@ -52,6 +57,14 @@ const GeneralInformation = () => {
             inputId="username"
             value={username}
             changeValue={setUsername}
+            readOnly={true}
+          />
+          <UserFormControl
+            type="text"
+            label="Name: "
+            inputId="name"
+            value={name}
+            changeValue={setName}
           />
           <UserFormControl
             type="text"

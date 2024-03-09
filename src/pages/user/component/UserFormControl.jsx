@@ -5,7 +5,7 @@ const UserFormControl = (props) => {
         <label htmlFor={props.inputId}>
             {props.label}
         </label>
-        <input type={props.type} value={props.value} onInput={(e) => props.changeValue(e.target.value)} className="focus:outline-0 focus:border-b-2 border-gray-700 w-full max-w-[500px]" readOnly={props.readOnly}/>
+        <input type={props.type} value={props.value} onInput={(e) => props.changeValue(e.target.value)} className="focus:outline-0 focus:border-b-2 border-gray-700 w-full max-w-[500px]" disabled={props.readOnly}/>
       </div>
     </>
   );

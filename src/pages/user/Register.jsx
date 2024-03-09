@@ -1,17 +1,31 @@
 import Form from "react-bootstrap/Form";
-import { selectIsAuthenticate, register } from "./userSlice";
+import {
+  register,
+  selectUserStatus,
+  resetUserCurrentProcess,
+} from "./userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isAuthenticate = useSelector(selectIsAuthenticate);
+  const userStatus = useSelector(selectUserStatus);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
+
+  useEffect(() => {
+    if (
+      userStatus.currentProcess === "register" &&
+      userStatus.status === "succeeded"
+    ) {
+      dispatch(resetUserCurrentProcess());
+      navigate("/login");
+    }
+  }, [dispatch, userStatus, navigate]);
 
   return (
     <>
@@ -24,10 +38,9 @@ const Register = () => {
           <Form
             onSubmit={async (e) => {
               e.preventDefault();
-              dispatch(register({ username, password, email, passwordConfirm }));
-              if (isAuthenticate) {
-                navigate("/");
-              }
+              dispatch(
+                register({ username, password, email, passwordConfirm })
+              );
             }}
           >
             <Form.Group className="mb-3" controlId="formBasicUsername">

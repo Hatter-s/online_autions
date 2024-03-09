@@ -7,6 +7,7 @@ import {
   addOrderAPI,
   getOrdersBySellerIdAPI,
   getOrdersByBuyerIdAPI,
+  getOrderByProductIdAPI
 } from "@/api";
 
 const initialState = {
@@ -22,6 +23,7 @@ const initialState = {
     offer_price: 0,
     is_fix_price: false,
     is_accept: false,
+    buyer_name: ""
   },
   // Process available: add-order, update-order
   currentProcess: null,
@@ -49,7 +51,8 @@ export const ordersSlice = createSlice({
       })
       .addCase(addOrder.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.userOrders = [action.payload, ...state.userOrders];
+        state.buyerOrders = [action.payload, ...state.buyerOrders];
+
         state.error = null;
       })
       .addCase(addOrder.rejected, (state, action) => {
@@ -108,6 +111,19 @@ export const ordersSlice = createSlice({
       .addCase(getOrdersByBuyerId.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
+      })
+
+      .addCase(getOrderByProductId.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getOrderByProductId.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.currentOrder = action.payload;
+        state.error = null;
+      })
+      .addCase(getOrderByProductId.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
       });
   },
 });
@@ -125,6 +141,14 @@ export const getOrdersByBuyerId = createAsyncThunk(
   "orders/getOrdersByBuyerId",
   async (buyerId) => {
     const response = await getOrdersByBuyerIdAPI(buyerId);
+    return response;
+  }
+);
+
+export const getOrderByProductId = createAsyncThunk(
+  "orders/getOrderByProductId",
+  async (productId) => {
+    const response = await getOrderByProductIdAPI(productId);
     return response;
   }
 );
@@ -157,7 +181,7 @@ export const addOrder = createAsyncThunk(
 export const { resetOrdersCurrentProcess } = ordersSlice.actions;
 
 // selector
-export const selectCurrentOrder = (state) => state.orders.currentProduct;
+export const selectCurrentOrder = (state) => state.orders.currentOrder;
 export const selectSellerOrders = (state) => state.orders.sellerOrders;
 export const selectBuyerOrders = (state) => state.orders.buyerOrders;
 export const selectOrdersError = (state) => state.orders.error;

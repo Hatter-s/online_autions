@@ -3,6 +3,11 @@ import {
   createAsyncThunk,
   createSelector,
 } from "@reduxjs/toolkit";
+
+import {
+  getOrderByProductId
+} from "@/app/slice/ordersSlice";
+
 import {
   addProductAPI,
   getAllProductsAPI,
@@ -133,6 +138,14 @@ export const updateProduct = createAsyncThunk(
     return response;
   }
 );
+
+// action
+export const getFullCurrentProduct = (productId) => {
+  return dispatch => {
+    dispatch(getProductById(productId));
+    dispatch(getOrderByProductId(productId));
+  }
+}
 
 // reducer (action methods)
 export const { resetCurrentProcess, toggleOfferModal } =

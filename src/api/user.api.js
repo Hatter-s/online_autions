@@ -9,6 +9,7 @@ export const loginAPI = async (userLogin) => {
   return {
     id: userData.id,
     username: userData.username,
+    name: userData.name,
     email: userData.email,
     avatar: userData.avatar,
     balance: userData.balance,
@@ -20,6 +21,7 @@ export const loginAPI = async (userLogin) => {
 export const registerAPI = async (userRegister) => {
   const data = {
     username: userRegister.username,
+    name: userRegister.username,
     email: userRegister.email,
     emailVisibility: true,
     password: userRegister.password,
@@ -30,6 +32,7 @@ export const registerAPI = async (userRegister) => {
   };
 
   const record = await pb.collection("users").create(data);
+
   return record;
 };
 
@@ -45,6 +48,7 @@ export const resetTokenAPI = async () => {
     return {
       id: userData.id,
       username: userData.username,
+      name: userData.name,
       email: userData.email,
       avatar: userData.avatar,
       balance: userData.balance,
@@ -61,6 +65,7 @@ export const updateUserInfoAPI = async (userId, updateData) => {
   return {
     id: record.id,
     username: record.username,
+    name: record.name,
     email: record.email,
     avatar: record.avatar,
     balance: record.balance,
@@ -83,8 +88,10 @@ export const updateBalanceAPI = async (userId, updateBalance) => {
 };
 
 export const getUserNameByIdAPI = async (userId) => {
-    //make it can duplicate
-  const record = await pb.collection("users").getOne(userId,{ requestKey: null });
+  //make it can duplicate
+  const record = await pb
+    .collection("users")
+    .getOne(userId, { requestKey: null });
 
   return record.name;
 };
