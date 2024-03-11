@@ -15,7 +15,7 @@ import { selectUser } from "../user/userSlice";
 import { selectAllCategories } from "./categoriesSlice";
 import AddCategory from "./component/AddCategory";
 import { useNavigate } from "react-router-dom";
-import { getImageByUrl } from "../../utils";
+import { changeDateFormat, getImageByUrl } from "@/utils";
 
 /* eslint-disable react/no-unknown-property */
 const UpdateProduct = () => {
@@ -54,6 +54,7 @@ const UpdateProduct = () => {
       setDescription(product.description);
       setPrice(product.minium_price);
       setFixPrice(product.is_fix_price);
+      setTimeClosing(changeDateFormat(product.time_closing));
     }
   }, [product]);
 
@@ -69,6 +70,8 @@ const UpdateProduct = () => {
   const [price, setPrice] = useState(1);
   const [fixPrice, setFixPrice] = useState(false);
   const [updateFile, setUpdateFile] = useState(false);
+  const [timeClosing, setTimeClosing] = useState("");
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -90,6 +93,13 @@ const UpdateProduct = () => {
         product_image: imageFile,
         categories: category,
       };
+    }
+    
+    if(!fixPrice) {
+      updateData = {
+        ...updateData, 
+        time_closing: new Date(timeClosing),
+      }
     }
 
     dispatch(updateProduct({ productId, updateData }));
@@ -178,6 +188,21 @@ const UpdateProduct = () => {
             onChange={() => setFixPrice(!fixPrice)}
           />
         </Form.Group>
+
+        {!fixPrice && (
+          <Form.Group className="mb-3" controlId="formTimeClosing">
+            <Form.Label>Time Closing</Form.Label>
+
+            <Form.Control
+              type="date"
+              value={timeClosing}
+              onChange={(e) => setTimeClosing(e.target.value)}
+              min={changeDateFormat(new Date().getTime() + 24 * 60 * 60 * 1000)}
+              max={changeDateFormat(new Date().getTime() + 30 * 24 * 60 * 60 * 1000)}
+              required
+            />
+          </Form.Group>
+        )}
 
         <ButtonPrimary type="submit">Submit</ButtonPrimary>
       </Form>

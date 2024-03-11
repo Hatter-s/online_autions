@@ -1,15 +1,13 @@
 import Form from "react-bootstrap/Form";
 import { useState, useEffect } from "react";
-import {
-  addProduct,
-  selectProductStatus,
-} from "./productsSlice";
+import { addProduct, selectProductStatus } from "./productsSlice";
 import ButtonPrimary from "@/components/UI/ButtonPrimary";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../user/userSlice";
 import { selectAllCategories } from "./categoriesSlice";
 import AddCategory from "./component/AddCategory";
 import { useNavigate } from "react-router-dom";
+import { changeDateFormat } from "@/utils";
 
 /* eslint-disable react/no-unknown-property */
 const AddProduct = () => {
@@ -18,10 +16,13 @@ const AddProduct = () => {
 
   const categories = useSelector(selectAllCategories);
   const user = useSelector(selectUser);
-  const addProductStatus = useSelector(selectProductStatus)
+  const addProductStatus = useSelector(selectProductStatus);
   useEffect(() => {
-    if (addProductStatus.currentProcess === 'add-product' && addProductStatus.status === 'succeeded') {
-        navigate("/products");
+    if (
+      addProductStatus.currentProcess === "add-product" &&
+      addProductStatus.status === "succeeded"
+    ) {
+      navigate("/products");
     }
   }, [addProductStatus, dispatch, navigate]);
 
@@ -36,20 +37,34 @@ const AddProduct = () => {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(1);
   const [fixPrice, setFixPrice] = useState(false);
-  
+
+  const [timeClosing, setTimeClosing] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const productData = {
-      name,
-      description,
-      is_fix_price: fixPrice,
-      minium_price: Number(price),
-      seller: user.id,
-      product_image: imageFile,
-      categories: category
-    };
+    let productData;
+    if (fixPrice) {
+      productData = {
+        name,
+        description,
+        is_fix_price: fixPrice,
+        minium_price: Number(price),
+        seller: user.id,
+        product_image: imageFile,
+        categories: category,
+      };
+    } else {
+      productData = {
+        name,
+        description,
+        is_fix_price: fixPrice,
+        minium_price: Number(price),
+        seller: user.id,
+        product_image: imageFile,
+        categories: category,
+        time_closing: new Date(timeClosing),
+      };
+    }
 
     dispatch(addProduct(productData));
   };
@@ -139,6 +154,21 @@ const AddProduct = () => {
             onChange={() => setFixPrice(!fixPrice)}
           />
         </Form.Group>
+
+        {!fixPrice && (
+          <Form.Group className="mb-3" controlId="formTimeClosing">
+            <Form.Label>Time Closing</Form.Label>
+
+            <Form.Control
+              type="date"
+              value={timeClosing}
+              onChange={(e) => setTimeClosing(e.target.value)}
+              min={changeDateFormat(new Date().getTime() + 24 * 60 * 60 * 1000)}
+              max={changeDateFormat(new Date().getTime() + 30 * 24 * 60 * 60 * 1000)}
+              required
+            />
+          </Form.Group>
+        )}
 
         <ButtonPrimary type="submit">Submit</ButtonPrimary>
       </Form>

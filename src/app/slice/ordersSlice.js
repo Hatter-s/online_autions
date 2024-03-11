@@ -23,7 +23,8 @@ const initialState = {
     offer_price: 0,
     is_fix_price: false,
     is_accept: false,
-    buyer_name: ""
+    buyer_name: "",
+    seller_name: "",
   },
   // Process available: add-order, update-order
   currentProcess: null,

@@ -29,9 +29,18 @@ export const getProductByIdAPI = async (productId) => {
     minium_price: record.minium_price,
     seller: record.seller,
     category: record.categories,
+    time_closing: record.time_closing,
   };
 
   return product;
+};
+
+export const getProductBySellerIdAPI = async (sellerId) => {
+  const resultList = await pb.collection("products").getList(1, 50, {
+    filter: `seller = "${sellerId}"`,
+  });
+
+  return resultList.items;
 };
 
 export const addProductAPI = async (productData) => {
@@ -43,6 +52,7 @@ export const addProductAPI = async (productData) => {
     seller: productData.seller,
     product_image: productData.product_image,
     categories: productData.categories,
+    time_closing: productData.time_closing,
   };
 
   const record = await pb.collection("products").create(data);

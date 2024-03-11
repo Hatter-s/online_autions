@@ -13,6 +13,7 @@ import {
   getAllProductsAPI,
   getProductByIdAPI,
   updateProductAPI,
+  getProductBySellerIdAPI
 } from "@/api";
 
 const initialState = {
@@ -26,6 +27,7 @@ const initialState = {
     minium_price: "",
     seller: "",
     category: "",
+    time_closing: "",
   },
   // Process available: add-product, update-product
   currentProcess: null,
@@ -91,6 +93,19 @@ export const productsSlice = createSlice({
         state.error = action.error.message;
       })
 
+      .addCase(getProductBySellerId.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getProductBySellerId.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.products = action.payload;
+        state.error = null;
+      })
+      .addCase(getProductBySellerId.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+
       .addCase(getProductById.pending, (state) => {
         state.status = "loading";
       })
@@ -119,6 +134,14 @@ export const getAllProducts = createAsyncThunk(
   "products/getAllProducts",
   async (sort) => {
     const response = await getAllProductsAPI(sort);
+    return response;
+  }
+);
+
+export const getProductBySellerId = createAsyncThunk(
+  "products/getProductBySellerId",
+  async (sort) => {
+    const response = await getProductBySellerIdAPI(sort);
     return response;
   }
 );

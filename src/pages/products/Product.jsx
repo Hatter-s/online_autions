@@ -32,7 +32,9 @@ const Product = () => {
   const currentOrder = useSelector(selectCurrentOrder);
 
   const someName = useMemo(() => {
-    if (currentOrder) {
+    if (currentOrder?.buyer_id !== "" && currentOrder) {
+      console.log(currentOrder);
+      console.log(currentOrder?.buyer_id);
       return {
         ...product,
         offer_price: currentOrder.offer_price,
@@ -58,7 +60,6 @@ const Product = () => {
     return (
       <>
         <div className="my-10">
-          <OfferModal />
           <Row sm={1} md={2} xl={2}>
             <Col>
               <img
@@ -124,12 +125,11 @@ const Product = () => {
                   {someName.minium_price}$
                 </p>
               </div>
-              {currentOrder && (
+              {someName.haveOrder && (
                 <div>
                   <div className="flex flex-row gap-2">
                     <p className="text-lg font-semibold">Current price:</p>
                     <p className="text-lg font-semibold">
-                      {someName.offer_price}$
                     </p>
                     <p className="text-lg font-semibold">by</p>
                     <p className="text-lg font-semibold">

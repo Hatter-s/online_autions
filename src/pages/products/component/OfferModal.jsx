@@ -19,6 +19,7 @@ import {
   selectUserStatus,
   resetUserCurrentProcess,
 } from "@/pages/user/userSlice";
+import { useMemo } from "react";
 
 function OfferModal(props) {
   const dispatch = useDispatch();
@@ -35,7 +36,11 @@ function OfferModal(props) {
   }, [dispatch]);
 
   useEffect(() => {
-    setOfferPrice(props.someName.offer_price);
+    setOfferPrice(
+      props.someName?.haveOrder
+        ? props.someName.offer_price
+        : props.someName.minium_price
+    );
   }, [props.someName]);
 
   useEffect(() => {
@@ -113,7 +118,11 @@ function OfferModal(props) {
               value={offerPrice}
               onChange={(e) => setOfferPrice(e.target.value)}
               className="text-end max-w-24"
-              min={props.someName.offer_price}
+              min={
+                props.someName?.haveOrder
+                  ? props.someName.offer_price
+                  : props.someName.minium_price
+              }
               disabled={props.isFixPrice}
             />
           </Form.Group>
@@ -124,16 +133,16 @@ function OfferModal(props) {
         <Button variant="secondary" onClick={closeModal}>
           Close
         </Button>
-        
+
         {!props.isFixPrice && (
           <Button variant="primary" type="submit" form="makeOffer">
-          Make Offer
-        </Button>
+            Make Offer
+          </Button>
         )}
         {props.isFixPrice && (
           <Button variant="primary" type="submit" form="makeOffer">
-          Buy
-        </Button>
+            Buy
+          </Button>
         )}
       </Modal.Footer>
     </Modal>
