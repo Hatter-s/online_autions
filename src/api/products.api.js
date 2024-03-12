@@ -13,6 +13,7 @@ export const getAllProductsAPI = async (sort = "created") => {
     minium_price: product.minium_price,
     seller: product.seller,
     category: product.categories,
+    wish_list_of: product.wish_list_of,
   }));
 
   return products;
@@ -30,6 +31,7 @@ export const getProductByIdAPI = async (productId) => {
     seller: record.seller,
     category: record.categories,
     time_closing: record.time_closing,
+    wish_list_of: record.wish_list_of,
   };
 
   return product;
@@ -64,7 +66,9 @@ export const addProductAPI = async (productData) => {
     is_fix_price: record.is_fix_price,
     minium_price: record.minium_price,
     seller: record.seller,
-    category: record.category,
+    category: record.categories,
+    time_closing: productData.time_closing,
+    wish_list_of: record.wish_list_of,
   };
 
   return product;
@@ -84,10 +88,53 @@ export const updateProductAPI = async (productId, updateData) => {
     category: record.category,
   };
 };
-// after the above you can also access the auth data from the authStore
-// console.log(pb.authStore.isValid);
-// console.log(pb.authStore.token);
-// console.log(pb.authStore.model.id);
 
-// "logout" the last authenticated account
-// pb.authStore.clear();
+export const addUserToWishlistAPI = async (productId, userId, wishListOf) => {
+  if (wishListOf.includes(userId)) {
+    new Error("This product already in ur wish list!");
+  }
+  let record;
+  if (wishListOf.length === 0) {
+    record = await pb
+      .collection("products")
+      .update(productId, { wish_list_of: [userId] });
+  } else {
+    record = await pb
+      .collection("products")
+      .update(productId, { wish_list_of: [...wishListOf, userId] });
+  }
+
+  const product = {
+    id: record.id,
+    product_image: record.product_image,
+    name: record.name,
+    description: record.description,
+    is_fix_price: record.is_fix_price,
+    minium_price: record.minium_price,
+    seller: record.seller,
+    category: record.categories,
+    wish_list_of: record.wish_list_of,
+  };
+
+  return product;
+};
+
+export const getWatchListAPI = async (userId) => {
+  const records = await pb.collection("products").getList(1, 50, {
+    filter: `wish_list_of ~ "${userId}"`,
+  });
+
+  const products = records.items.map((product) => ({
+    id: product.id,
+    product_image: product.product_image,
+    name: product.name,
+    description: product.description,
+    is_fix_price: product.is_fix_price,
+    minium_price: product.minium_price,
+    seller: product.seller,
+    category: product.categories,
+    wish_list_of: product.wish_list_of,
+  }));
+
+  return products;
+};

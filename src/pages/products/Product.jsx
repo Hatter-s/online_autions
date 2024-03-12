@@ -6,7 +6,9 @@ import {
   selectCurrentProduct,
   toggleOfferModal,
   getFullCurrentProduct,
+  addUserToWishlist,
 } from "./productsSlice";
+import { selectUserId } from "../user/userSlice";
 
 import { selectCurrentOrder } from "@/app/slice/ordersSlice";
 
@@ -28,24 +30,40 @@ const Product = () => {
   const product = useSelector(selectCurrentProduct);
   const categories = useSelector(selectAllCategories);
   const seller = useSelector(selectSeller);
+  const userId = useSelector(selectUserId);
   const isSeller = useSelector(selectIsSeller);
   const currentOrder = useSelector(selectCurrentOrder);
 
   const someName = useMemo(() => {
+    let result = { ...product };
+
     if (currentOrder?.buyer_id !== "" && currentOrder) {
-      console.log(currentOrder);
-      console.log(currentOrder?.buyer_id);
-      return {
-        ...product,
+      result = {
+        ...result,
         offer_price: currentOrder.offer_price,
         buyer_name: currentOrder.buyer_name,
         haveOrder: true,
       };
+    } else {
+      result = {
+        ...result,
+        haveOrder: false
+      }
     }
 
-    return { ...product, haveOrder: false };
-  }, [product, currentOrder]);
+    result = {
+      ...result,
+      category: getCategoryById(categories, product.category)
+    }
 
+
+    return result;
+  }, [product, currentOrder, categories]);
+
+  const handleAddWatchList = (productId, userId, wishListOf) => {
+    dispatch(addUserToWishlist({ productId, userId, wishListOf }));
+  };
+  
   useEffect(() => {
     getFullCurrentProduct(productId)(dispatch);
   }, [dispatch, productId]);
@@ -113,7 +131,7 @@ const Product = () => {
           <h1>{someName.name}</h1>
           <p className="text-xl font-medium">{seller.username}</p>
           <p className="bg-blue-400 text-gray-100 inline-block px-2 py-1 rounded-full">
-            {getCategoryById(categories, someName.category)}
+            {someName.category}
           </p>
           <p>{someName.description}</p>
           <p>{`${someName.is_fix_price}`}</p>
@@ -129,8 +147,7 @@ const Product = () => {
                 <div>
                   <div className="flex flex-row gap-2">
                     <p className="text-lg font-semibold">Current price:</p>
-                    <p className="text-lg font-semibold">
-                    </p>
+                    <p className="text-lg font-semibold">{someName.offer_price}$</p>
                     <p className="text-lg font-semibold">by</p>
                     <p className="text-lg font-semibold">
                       {someName.buyer_name}
@@ -143,7 +160,16 @@ const Product = () => {
                 <Button onClick={() => dispatch(toggleOfferModal())}>
                   Make offer
                 </Button>
-                <Button variant="outline-primary">
+                <Button
+                  variant="outline-primary"
+                  onClick={() =>
+                    handleAddWatchList(
+                      someName.id,
+                      userId,
+                      someName.wish_list_of
+                    )
+                  }
+                >
                   <div className="flex flex-row gap-1 items-center">
                     <Cart /> Add to watch list
                   </div>
@@ -164,7 +190,16 @@ const Product = () => {
                 <Button onClick={() => dispatch(toggleOfferModal())}>
                   Buy
                 </Button>
-                <Button variant="outline-primary">
+                <Button
+                  variant="outline-primary"
+                  onClick={() =>
+                    handleAddWatchList(
+                      someName.id,
+                      userId,
+                      someName.wish_list_of
+                    )
+                  }
+                >
                   <div className="flex flex-row gap-1 items-center">
                     <Cart /> Add to watch list
                   </div>

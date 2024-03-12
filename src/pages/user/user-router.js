@@ -1,6 +1,7 @@
 import GeneralInformation from "./GeneralInformation";
 import SellProducts from "./SellProduct";
 import Orders from "./component/Orders";
+import WatchList from "./component/WatchList";
 
 const userRouter = [
   { index: true, Component: GeneralInformation },
@@ -18,7 +19,12 @@ const userRouter = [
     id: "orders",
     path: "orders",
     Component: Orders,
-  }
+  },
+  {
+    id: "watch-list",
+    path: "watch-list",
+    Component: WatchList,
+  },
 ];
 
 export default userRouter;

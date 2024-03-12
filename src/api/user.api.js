@@ -96,6 +96,7 @@ export const getUserNameByIdAPI = async (userId) => {
   return record.name;
 };
 
+
 // after the above you can also access the auth data from the authStore
 // console.log(pb.authStore.isValid);
 // console.log(pb.authStore.token);

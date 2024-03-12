@@ -17,3 +17,24 @@ export const changeDateFormat = (date) => {
   const year = newDate.getFullYear();
   return `${year}-${month}-${dateD}`;
 }
+
+export const remainDate = (date) => {
+  let compareDate = new Date(date);
+  let presentDate = Date.now();
+  let differenceInTime = compareDate.getTime() - presentDate;
+  if(differenceInTime <= 60000) {
+    return '1 minute';
+  }
+
+  if(differenceInTime <= 3600000) {
+    return Math.round(differenceInTime / 60000) + ' minutes';
+  }
+
+  if(differenceInTime <= 86400000) {
+    return Math.round(differenceInTime / 3600000) + ' hours';
+  }
+
+  let differenceInDays = Math.round(differenceInTime / (1000 * 3600 * 24));
+
+  return differenceInDays + ' days';
+}

@@ -178,6 +178,14 @@ export const addOrder = createAsyncThunk(
 //   }
 // );
 
+// action
+export const getFullOrderOfUser = (userId) => {
+  return (dispatch) => {
+    dispatch(getOrdersBySellerId(userId));
+    dispatch(getOrdersByBuyerId(userId));
+  };
+};
+
 // reducer (action methods)
 export const { resetOrdersCurrentProcess } = ordersSlice.actions;
 

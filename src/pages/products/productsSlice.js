@@ -4,16 +4,16 @@ import {
   createSelector,
 } from "@reduxjs/toolkit";
 
-import {
-  getOrderByProductId
-} from "@/app/slice/ordersSlice";
+import { getOrderByProductId } from "@/app/slice/ordersSlice";
 
 import {
   addProductAPI,
   getAllProductsAPI,
   getProductByIdAPI,
   updateProductAPI,
-  getProductBySellerIdAPI
+  getProductBySellerIdAPI,
+  addUserToWishlistAPI,
+  getWatchListAPI
 } from "@/api";
 
 const initialState = {
@@ -28,6 +28,7 @@ const initialState = {
     seller: "",
     category: "",
     time_closing: "",
+    wish_list_of: "",
   },
   // Process available: add-product, update-product
   currentProcess: null,
@@ -106,6 +107,19 @@ export const productsSlice = createSlice({
         state.error = action.error.message;
       })
 
+      .addCase(getWatchList.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getWatchList.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.products = action.payload;
+        state.error = null;
+      })
+      .addCase(getWatchList.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+
       .addCase(getProductById.pending, (state) => {
         state.status = "loading";
       })
@@ -115,6 +129,19 @@ export const productsSlice = createSlice({
         state.error = null;
       })
       .addCase(getProductById.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+
+      .addCase(addUserToWishlist.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(addUserToWishlist.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.currentProduct = action.payload;
+        state.error = null;
+      })
+      .addCase(addUserToWishlist.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       });
@@ -162,17 +189,34 @@ export const updateProduct = createAsyncThunk(
   }
 );
 
+export const addUserToWishlist = createAsyncThunk(
+  "products/addUserToWishlist",
+  async ({productId, userId, wishListOf }) => {
+    const response = await addUserToWishlistAPI(productId, userId, wishListOf);
+    return response;
+  }
+);
+
+export const getWatchList = createAsyncThunk(
+  "products/getWatchList",
+  async (userId) => {
+    const response = await getWatchListAPI(userId);
+    return response;
+  }
+);
+
+
+
 // action
 export const getFullCurrentProduct = (productId) => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(getProductById(productId));
     dispatch(getOrderByProductId(productId));
-  }
-}
+  };
+};
 
 // reducer (action methods)
-export const { resetCurrentProcess, toggleOfferModal } =
-  productsSlice.actions;
+export const { resetCurrentProcess, toggleOfferModal } = productsSlice.actions;
 // selector
 export const selectCurrentProduct = (state) => state.products.currentProduct;
 export const selectProducts = (state) => state.products.products;

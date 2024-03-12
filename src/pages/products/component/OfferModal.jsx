@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { Form } from "react-bootstrap";
@@ -19,7 +19,6 @@ import {
   selectUserStatus,
   resetUserCurrentProcess,
 } from "@/pages/user/userSlice";
-import { useMemo } from "react";
 
 function OfferModal(props) {
   const dispatch = useDispatch();
@@ -31,6 +30,14 @@ function OfferModal(props) {
 
   const [offerPrice, setOfferPrice] = useState(0);
 
+  const newMiniumPrice = useMemo(
+    () =>
+      props.someName?.haveOrder
+        ? props.someName.offer_price + 1
+        : props.someName.minium_price + 1,
+    [props.someName]
+  );
+
   const closeModal = useCallback(() => {
     dispatch(toggleOfferModal());
   }, [dispatch]);
@@ -38,8 +45,8 @@ function OfferModal(props) {
   useEffect(() => {
     setOfferPrice(
       props.someName?.haveOrder
-        ? props.someName.offer_price
-        : props.someName.minium_price
+        ? props.someName.offer_price + 1
+        : props.someName.minium_price + 1
     );
   }, [props.someName]);
 
@@ -69,10 +76,7 @@ function OfferModal(props) {
   }, [dispatch, closeModal, userStatus]);
 
   const checkOfferValid = (offerPrice) => {
-    if (
-      offerPrice > currentUser.balance ||
-      offerPrice < currentProduct.minium_price
-    ) {
+    if (offerPrice > currentUser.balance || offerPrice < newMiniumPrice) {
       return false;
     }
 
@@ -118,11 +122,7 @@ function OfferModal(props) {
               value={offerPrice}
               onChange={(e) => setOfferPrice(e.target.value)}
               className="text-end max-w-24"
-              min={
-                props.someName?.haveOrder
-                  ? props.someName.offer_price
-                  : props.someName.minium_price
-              }
+              min={newMiniumPrice}
               disabled={props.isFixPrice}
             />
           </Form.Group>

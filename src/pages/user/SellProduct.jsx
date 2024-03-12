@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectSellProducts, selectUserId } from "./userSlice";
+import { selectUserId } from "./userSlice";
 import { selectAllCategories } from "../products/categoriesSlice";
 import ButtonPrimary from "@/components/UI/ButtonPrimary";
 import { useNavigate } from "react-router-dom";
@@ -47,6 +47,7 @@ const SellProducts = () => {
   return (
     <>
       <div className="my-10">
+      <h1>Sell Products</h1>
       <Row xs={1} sm={1} md={2} lg={3} xl={4} className="g-4 items-stretch">
         {sellProducts.map((product) => (
           <Col key={product.id} className="flex flex-col">
@@ -62,12 +63,12 @@ const SellProducts = () => {
               <Card.Body className="flex flex-col gap-4 justify-between">
                 <div>
                   <Card.Title>{product.name}</Card.Title>
-                  <Card.Text className="bg-blue-400 text-gray-100 inline-block px-2 py-1 rounded-full">{getCategoryById(categories, product.category)}</Card.Text>
+                  <Card.Text className="bg-blue-400 text-gray-100 inline-block px-2 py-1 rounded-full">{getCategoryById(categories, product.categories)}</Card.Text>
                   <Card.Text>{product.description.slice(0, 100)}</Card.Text>
                 </div>
 
                 <ButtonPrimary
-                  handleClick={() => navigate(`product/${product.id}`)}
+                  handleClick={() => navigate(`/products/product/${product.id}`)}
                 >
                   See
                 </ButtonPrimary>
