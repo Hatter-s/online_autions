@@ -69,9 +69,9 @@ const WatchList = () => {
           </h1>
           <ButtonPrimary
             type="button"
-            handleClick={() => navigate("/products/add-product")}
+            handleClick={() => navigate("/products")}
           >
-            Add product
+            Go to Products page
           </ButtonPrimary>
         </div>
       </>

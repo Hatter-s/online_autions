@@ -1,6 +1,6 @@
 import GeneralInformation from "./GeneralInformation";
 import SellProducts from "./SellProduct";
-import Orders from "./component/Orders";
+import Orders from "./component/Orders/Orders";
 import WatchList from "./component/WatchList";
 
 const userRouter = [

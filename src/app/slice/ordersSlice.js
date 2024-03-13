@@ -7,7 +7,7 @@ import {
   addOrderAPI,
   getOrdersBySellerIdAPI,
   getOrdersByBuyerIdAPI,
-  getOrderByProductIdAPI
+  getBestOrderByProductIdAPI
 } from "@/api";
 
 const initialState = {
@@ -50,10 +50,8 @@ export const ordersSlice = createSlice({
         state.currentProcess = "add-order";
         state.status = "loading";
       })
-      .addCase(addOrder.fulfilled, (state, action) => {
+      .addCase(addOrder.fulfilled, (state) => {
         state.status = "succeeded";
-        state.buyerOrders = [action.payload, ...state.buyerOrders];
-
         state.error = null;
       })
       .addCase(addOrder.rejected, (state, action) => {
@@ -114,15 +112,15 @@ export const ordersSlice = createSlice({
         state.error = action.error.message;
       })
 
-      .addCase(getOrderByProductId.pending, (state) => {
+      .addCase(getBestOrderByProductId.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(getOrderByProductId.fulfilled, (state, action) => {
+      .addCase(getBestOrderByProductId.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.currentOrder = action.payload;
         state.error = null;
       })
-      .addCase(getOrderByProductId.rejected, (state, action) => {
+      .addCase(getBestOrderByProductId.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       });
@@ -146,10 +144,10 @@ export const getOrdersByBuyerId = createAsyncThunk(
   }
 );
 
-export const getOrderByProductId = createAsyncThunk(
-  "orders/getOrderByProductId",
+export const getBestOrderByProductId = createAsyncThunk(
+  "orders/getBestOrderByProductId",
   async (productId) => {
-    const response = await getOrderByProductIdAPI(productId);
+    const response = await getBestOrderByProductIdAPI(productId);
     return response;
   }
 );

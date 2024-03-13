@@ -4,7 +4,7 @@ import {
   createSelector,
 } from "@reduxjs/toolkit";
 
-import { getOrderByProductId } from "@/app/slice/ordersSlice";
+import { getBestOrderByProductId } from "@/app/slice/ordersSlice";
 
 import {
   addProductAPI,
@@ -206,12 +206,11 @@ export const getWatchList = createAsyncThunk(
 );
 
 
-
 // action
 export const getFullCurrentProduct = (productId) => {
   return (dispatch) => {
     dispatch(getProductById(productId));
-    dispatch(getOrderByProductId(productId));
+    dispatch(getBestOrderByProductId(productId));
   };
 };
 

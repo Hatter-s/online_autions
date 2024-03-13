@@ -34,7 +34,7 @@ function OfferModal(props) {
     () =>
       props.someName?.haveOrder
         ? props.someName.offer_price + 1
-        : props.someName.minium_price + 1,
+        : props.someName.minium_price,
     [props.someName]
   );
 
@@ -43,12 +43,8 @@ function OfferModal(props) {
   }, [dispatch]);
 
   useEffect(() => {
-    setOfferPrice(
-      props.someName?.haveOrder
-        ? props.someName.offer_price + 1
-        : props.someName.minium_price + 1
-    );
-  }, [props.someName]);
+    setOfferPrice(newMiniumPrice);
+  }, [newMiniumPrice]);
 
   useEffect(() => {
     if (
@@ -113,7 +109,7 @@ function OfferModal(props) {
             {!props.isFixPrice && (
               <Form.Label className="mb-0">Offer price: </Form.Label>
             )}
-            {props.isFixPrice && (
+          {props.isFixPrice && (
               <Form.Label className="mb-0">Buy price: </Form.Label>
             )}
 

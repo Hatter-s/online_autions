@@ -13,7 +13,7 @@ import { selectUserId } from "../user/userSlice";
 import { selectCurrentOrder } from "@/app/slice/ordersSlice";
 
 import { Row, Col, Button } from "react-bootstrap";
-import { getCategoryById } from "@/utils";
+import { getCategoryById, remainDate } from "@/utils";
 import { Cart } from "react-bootstrap-icons";
 import OfferModal from "./component/OfferModal";
 import {
@@ -47,15 +47,13 @@ const Product = () => {
     } else {
       result = {
         ...result,
-        haveOrder: false
-      }
+        haveOrder: false,
+      };
     }
-
     result = {
       ...result,
-      category: getCategoryById(categories, product.category)
-    }
-
+      category: getCategoryById(categories, product.categories),
+    };
 
     return result;
   }, [product, currentOrder, categories]);
@@ -63,7 +61,7 @@ const Product = () => {
   const handleAddWatchList = (productId, userId, wishListOf) => {
     dispatch(addUserToWishlist({ productId, userId, wishListOf }));
   };
-  
+
   useEffect(() => {
     getFullCurrentProduct(productId)(dispatch);
   }, [dispatch, productId]);
@@ -90,21 +88,29 @@ const Product = () => {
               <h1>{product.name}</h1>
               <p className="text-xl font-medium">{seller.username}</p>
               <p className="bg-blue-400 text-gray-100 inline-block px-2 py-1 rounded-full">
-                {getCategoryById(categories, product.category)}
+                {someName.category}
               </p>
               <p>{product.description}</p>
-              <p>{`${product.is_fix_price}`}</p>
               <div className="flex flex-row gap-4">
                 <p className="text-lg font-semibold">Minium price:</p>
                 <p className="text-3xl text-pri-grad font-semibold">
                   {product.minium_price}$
                 </p>
               </div>
+              {!someName.is_fix_price && (
+                <>
+                  <div className="flex flex-row gap-2 text-lg font-medium">
+                    <p>Time remain:</p>
+                    <p>{remainDate(someName.time_closing)}</p>
+                  </div>
+                </>
+              )}
               <div className="flex gap-2">
                 <Button
                   onClick={() =>
                     navigate(`/products/update-product/${productId}`)
                   }
+                  disabled={someName.product_status !== 0 || someName.haveOrder}
                 >
                   Update
                 </Button>
@@ -134,9 +140,13 @@ const Product = () => {
             {someName.category}
           </p>
           <p>{someName.description}</p>
-          <p>{`${someName.is_fix_price}`}</p>
+
           {!someName.is_fix_price && (
             <>
+              <div className="flex flex-row gap-2 text-lg font-medium">
+                <p>Time remain:</p>
+                <p>{remainDate(someName.time_closing)}</p>
+              </div>
               <div className="flex flex-row gap-4">
                 <p className="text-lg font-semibold">Minium price:</p>
                 <p className="text-3xl text-pri-grad font-semibold">
@@ -147,7 +157,9 @@ const Product = () => {
                 <div>
                   <div className="flex flex-row gap-2">
                     <p className="text-lg font-semibold">Current price:</p>
-                    <p className="text-lg font-semibold">{someName.offer_price}$</p>
+                    <p className="text-lg font-semibold">
+                      {someName.offer_price}$
+                    </p>
                     <p className="text-lg font-semibold">by</p>
                     <p className="text-lg font-semibold">
                       {someName.buyer_name}
@@ -157,7 +169,10 @@ const Product = () => {
               )}
 
               <div className="flex gap-2">
-                <Button onClick={() => dispatch(toggleOfferModal())}>
+                <Button
+                  onClick={() => dispatch(toggleOfferModal())}
+                  disabled={someName.product_status !== 0}
+                >
                   Make offer
                 </Button>
                 <Button
@@ -169,6 +184,7 @@ const Product = () => {
                       someName.wish_list_of
                     )
                   }
+                  disabled={someName.product_status !== 0}
                 >
                   <div className="flex flex-row gap-1 items-center">
                     <Cart /> Add to watch list
@@ -187,7 +203,10 @@ const Product = () => {
                 </p>
               </div>
               <div className="flex gap-2">
-                <Button onClick={() => dispatch(toggleOfferModal())}>
+                <Button
+                  onClick={() => dispatch(toggleOfferModal())}
+                  disabled={someName.product_status !== 0}
+                >
                   Buy
                 </Button>
                 <Button
@@ -199,6 +218,7 @@ const Product = () => {
                       someName.wish_list_of
                     )
                   }
+                  disabled={someName.product_status !== 0}
                 >
                   <div className="flex flex-row gap-1 items-center">
                     <Cart /> Add to watch list

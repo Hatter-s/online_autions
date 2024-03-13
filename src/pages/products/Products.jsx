@@ -43,7 +43,7 @@ const Products = () => {
               <Card.Body className="flex flex-col gap-4 justify-between">
                 <div>
                   <Card.Title>{product.name}</Card.Title>
-                  <Card.Text className="bg-blue-400 text-gray-100 inline-block px-2 py-1 rounded-full">{getCategoryById(categories, product.category)}</Card.Text>
+                  <Card.Text className="bg-blue-400 text-gray-100 inline-block px-2 py-1 rounded-full">{getCategoryById(categories, product.categories)}</Card.Text>
                   <Card.Text>{product.description.slice(0, 100)}</Card.Text>
                 </div>
 

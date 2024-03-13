@@ -4,6 +4,7 @@ import { resetToken } from './pages/user/userSlice'
 import { useDispatch } from 'react-redux'
 import { RouterProvider } from 'react-router-dom'
 import router from '@/app/routes';
+import { handleToDateProduct } from '@/utils';
 
 function App() {
   const dispatch = useDispatch();
@@ -14,6 +15,11 @@ function App() {
     }
     
   }, [dispatch])
+
+  useEffect(() => {
+    handleToDateProduct();
+  }, [])
+  
   
   return (
     <>

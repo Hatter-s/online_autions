@@ -1,7 +1,16 @@
 import pb from "./config";
+import { updateProductAPI } from "@/api";
 
 export const addOrderAPI = async (orderData) => {
-  const record = await pb.collection("orders").create(orderData);
+  let record;
+  if (orderData.is_fix_price) {
+    record = await pb
+      .collection("orders")
+      .create({ ...orderData, order_status: 2 });
+    await updateProductAPI(orderData.product_id, { product_status: 2 });
+  } else {
+    record = await pb.collection("orders").create(orderData);
+  }
 
   return record;
 };
@@ -10,7 +19,7 @@ export const getOrdersBySellerIdAPI = async (sellerId) => {
   // fetch a paginated records list
   const resultList = await pb.collection("ordersView").getList(1, 50, {
     filter: `seller_id = "${sellerId}"`,
-    expand: "buyer_id, product_id"
+    expand: "buyer_id, product_id",
   });
 
   //   const resultList = await pb.collection('orders').getFullList({
@@ -34,19 +43,24 @@ export const getOrdersBySellerIdAPI = async (sellerId) => {
 };
 
 export const getOrdersByBuyerIdAPI = async (buyerId) => {
-  const resultList = await pb.collection("orders").getList(1, 50, {
+  const resultList = await pb.collection("buyerOrdersViews").getList(1, 50, {
     filter: `buyer_id ="${buyerId}"`,
+    expand: "seller_id, product_id",
   });
 
-  
-
-  return ;
+  return resultList.items;
 };
 
-export const getOrderByProductIdAPI = async (productId) => {
+export const getBestOrderByProductIdAPI = async (productId) => {
   const resultList = await pb.collection("ordersView").getList(1, 50, {
     filter: `product_id = "${productId}"`,
   });
 
   return resultList.items[0];
 };
+
+export const updateOrderAPI = async (orderId, orderData) => {
+  const record = await pb.collection('orders').update(orderId, orderData);
+
+  return record;
+}

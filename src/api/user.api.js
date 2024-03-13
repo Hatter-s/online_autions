@@ -76,15 +76,7 @@ export const updateUserInfoAPI = async (userId, updateData) => {
 
 export const updateBalanceAPI = async (userId, updateBalance) => {
   const record = await pb.collection("users").update(userId, updateBalance);
-  return {
-    id: record.id,
-    username: record.username,
-    email: record.email,
-    avatar: record.avatar,
-    balance: record.balance,
-    watch_list: record.watch_list,
-    sell_list: record.sell_list,
-  };
+  return record;
 };
 
 export const getUserNameByIdAPI = async (userId) => {
