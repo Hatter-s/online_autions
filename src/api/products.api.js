@@ -1,38 +1,16 @@
 import pb from "./config";
 
-export const getAllProductsAPI = async (sort = "created") => {
-  const records = await pb.collection("products").getFullList({
-    sort: "-" + sort,
-  });
-  // const products = records.map((product) => ({
-  //   id: product.id,
-  //   product_image: product.product_image,
-  //   name: product.name,
-  //   description: product.description,
-  //   is_fix_price: product.is_fix_price,
-  //   minium_price: product.minium_price,
-  //   seller: product.seller,
-  //   category: product.categories,
-  //   wish_list_of: product.wish_list_of,
-  // }));
+export const getAllProductsAPI = async (sort = "-created,id") => {
+  const records = await pb.collection('products').getList(1, 50, {
+    filter: `product_status = 0`,
+    sort: sort
+});
 
-  return records;
+  return records.items;
 };
 
 export const getProductByIdAPI = async (productId) => {
   const record = await pb.collection("products").getOne(productId);
-  // const product = {
-  //   id: record.id,
-  //   product_image: record.product_image,
-  //   name: record.name,
-  //   description: record.description,
-  //   is_fix_price: record.is_fix_price,
-  //   minium_price: record.minium_price,
-  //   seller: record.seller,
-  //   category: record.categories,
-  //   time_closing: record.time_closing,
-  //   wish_list_of: record.wish_list_of,
-  // };
 
   return record;
 };

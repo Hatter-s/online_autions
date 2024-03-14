@@ -1,5 +1,5 @@
 import pb from "./config";
-import { updateProductAPI } from "@/api";
+import { updateProductAPI, addShippingAPI } from "@/api";
 
 export const addOrderAPI = async (orderData) => {
   let record;
@@ -8,8 +8,9 @@ export const addOrderAPI = async (orderData) => {
       .collection("orders")
       .create({ ...orderData, order_status: 2 });
     await updateProductAPI(orderData.product_id, { product_status: 2 });
+    await addShippingAPI({buyer: orderData.buyer_id, seller: orderData.seller_id,order: record.id})
   } else {
-    record = await pb.collection("orders").create(orderData);
+    record = await pb.collection("orders").create(orderData.buyer_id);
   }
 
   return record;

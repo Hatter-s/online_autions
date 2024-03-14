@@ -3,6 +3,7 @@ import {
   getBestOrderByProductIdAPI,
   updateProductAPI,
   updateOrderAPI,
+  addShippingAPI,
 } from "@/api";
 
 export * from "./categories";
@@ -50,6 +51,25 @@ export const remainDate = (date) => {
   return differenceInDays + " days";
 };
 
+export const handleShippingStatus = (shippingStatus) => {
+  const shippingStatusTexts = [
+    "Seller is prepare the order",
+    "Seller cancel the order",
+    "Buyer cancel the order",
+    "The order is given to shipping unit",
+    "The order is on the way to you",
+    "The order has been delivered successfully",
+  ];
+
+  if (typeof shippingStatus === "string") {
+    return shippingStatusTexts.findIndex(
+      (statusText) => statusText === shippingStatus
+    );
+  }
+
+  return shippingStatusTexts[shippingStatus];
+};
+
 export const handleToDateProduct = async () => {
   setInterval(async () => {
     const products = await getProductToDateAPI();
@@ -57,10 +77,10 @@ export const handleToDateProduct = async () => {
     if (products.length === 0) {
       return;
     }
-  
+
     for (const product of products) {
       const order = await getBestOrderByProductIdAPI(product.id);
-  
+
       if (order === undefined) {
         await updateProductAPI(product.id, { product_status: 1 });
       } else {
@@ -69,9 +89,14 @@ export const handleToDateProduct = async () => {
         });
         if (Object.keys(updateOrderStatus).length !== 0) {
           await updateProductAPI(product.id, { product_status: 2 });
+          await addShippingAPI({
+            order_id: order.id,
+            seller: order.seller_id,
+            buyer: order.buyer_id,
+            status: "Seller is prepare the item",
+          });
         }
       }
     }
   }, 60 * 1000);
-
 };

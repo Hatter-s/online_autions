@@ -1,8 +1,8 @@
 
 const ButtonPrimary = (props) => {
-    const className = props.className + 'text-white bg-gradient-to-r from-blue-400 hover:opacity-90 p-2 rounded-md border';
+    const className = props.className + ' bg-gradient-to-r from-blue-400 hover:opacity-90 p-2 rounded-md border';
     return (
-        <button type={props.type} className={className} onClick={props.handleClick}>
+        <button type={props.type} className={className} onClick={props.handleClick} disabled={props.disabled}>
             {props.children ? props.children : 'Button'}
         </button>
     )

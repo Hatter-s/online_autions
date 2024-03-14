@@ -8,6 +8,7 @@ import { selectAllCategories } from "./categoriesSlice";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getCategoryById } from "@/utils";
+import SearchBar from "./component/SearchBar";
 
 const Products = () => {
   const navigate = useNavigate();
@@ -27,7 +28,13 @@ const Products = () => {
 
   return (
     <div className="my-10">
-      <h1 className="mb-10">Products page</h1>
+      <div className="flex flex-row flex-wrap justify-between items-center mb-10">
+      <h1 className="">Products page</h1>
+      <ButtonPrimary handleClick={() => navigate('add-product')}>
+        Add product
+      </ButtonPrimary>
+      </div>
+      <SearchBar />
       <Row xs={1} sm={1} md={2} lg={3} xl={4} className="g-4 items-stretch">
         {products.map((product) => (
           <Col key={product.id} className="flex flex-col">
