@@ -13,7 +13,7 @@ import {
   updateProductAPI,
   getProductBySellerIdAPI,
   addUserToWishlistAPI,
-  getWatchListAPI
+  getWatchListAPI,
 } from "@/api";
 
 const initialState = {
@@ -30,6 +30,8 @@ const initialState = {
     time_closing: "",
     wish_list_of: "",
   },
+  filter: null,
+  sort: {sortType: "DESC", sortKind: "created"},
   // Process available: add-product, update-product
   currentProcess: null,
   displayOfferModal: false,
@@ -49,6 +51,13 @@ export const productsSlice = createSlice({
     },
     toggleOfferModal(state) {
       state.displayOfferModal = !state.displayOfferModal;
+    },
+    updateSort(state, action) {
+      state.sort = action.payload;
+    },
+
+    updateFilter(state, action) {
+      state.filter = action.payload;
     },
   },
   extraReducers(builder) {
@@ -138,7 +147,6 @@ export const productsSlice = createSlice({
       })
       .addCase(addUserToWishlist.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.currentProduct = action.payload;
         state.error = null;
       })
       .addCase(addUserToWishlist.rejected, (state, action) => {
@@ -159,8 +167,8 @@ export const getProductById = createAsyncThunk(
 
 export const getAllProducts = createAsyncThunk(
   "products/getAllProducts",
-  async (sort) => {
-    const response = await getAllProductsAPI(sort);
+  async ({ filter, sort }) => {
+    const response = await getAllProductsAPI(filter, sort);
     return response;
   }
 );
@@ -191,7 +199,7 @@ export const updateProduct = createAsyncThunk(
 
 export const addUserToWishlist = createAsyncThunk(
   "products/addUserToWishlist",
-  async ({productId, userId, wishListOf }) => {
+  async ({ productId, userId, wishListOf }) => {
     const response = await addUserToWishlistAPI(productId, userId, wishListOf);
     return response;
   }
@@ -205,7 +213,6 @@ export const getWatchList = createAsyncThunk(
   }
 );
 
-
 // action
 export const getFullCurrentProduct = (productId) => {
   return (dispatch) => {
@@ -215,7 +222,12 @@ export const getFullCurrentProduct = (productId) => {
 };
 
 // reducer (action methods)
-export const { resetCurrentProcess, toggleOfferModal } = productsSlice.actions;
+export const {
+  resetCurrentProcess,
+  toggleOfferModal,
+  updateFilter,
+  updateSort,
+} = productsSlice.actions;
 // selector
 export const selectCurrentProduct = (state) => state.products.currentProduct;
 export const selectProducts = (state) => state.products.products;
@@ -224,6 +236,9 @@ export const selectAddProductSuccess = (state) =>
   state.products.addProductSuccess;
 export const selectDisplayOfferModal = (state) =>
   state.products.displayOfferModal;
+
+export const selectProductFilter = (state) => state.products.filter;
+export const selectProductSort = (state) => state.products.sort;
 
 export const selectStatus = (state) => state.products.status;
 export const selectCurrentProcess = (state) => state.products.currentProcess;

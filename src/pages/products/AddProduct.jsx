@@ -1,6 +1,6 @@
 import Form from "react-bootstrap/Form";
 import { useState, useEffect } from "react";
-import { addProduct, selectProductStatus } from "./productsSlice";
+import { addProduct, selectProductStatus, resetCurrentProcess } from "./productsSlice";
 import ButtonPrimary from "@/components/UI/ButtonPrimary";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../user/userSlice";
@@ -22,6 +22,7 @@ const AddProduct = () => {
       addProductStatus.currentProcess === "add-product" &&
       addProductStatus.status === "succeeded"
     ) {
+      dispatch(resetCurrentProcess());
       navigate("/products");
     }
   }, [addProductStatus, dispatch, navigate]);

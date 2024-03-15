@@ -13,7 +13,7 @@ const BuyerShippings = (props) => {
   if (buyerShippings.length === 0) {
     return (
       <div className="my-4 buyerShippings">
-        <h2>Buyer Shippings</h2>
+        <h2>Your Shippings</h2>
         <p>Your don&apos;t have any shipping yet</p>
         <Link to="/products">Go to products page</Link>
       </div>
@@ -24,7 +24,7 @@ const BuyerShippings = (props) => {
     <>
 
       <div className="my-4 buyerShippings">
-        <h2>Buyer Shippings</h2>
+        <h2>Your Shippings</h2>
         <Row xs={1} sm={1} md={2} lg={3} xl={4} className="g-4 items-stretch">
           {buyerShippings.map((shipping) => (
             <Col key={shipping.id} className="flex flex-col">

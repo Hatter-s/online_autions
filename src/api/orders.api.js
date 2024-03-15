@@ -10,7 +10,7 @@ export const addOrderAPI = async (orderData) => {
     await updateProductAPI(orderData.product_id, { product_status: 2 });
     await addShippingAPI({buyer: orderData.buyer_id, seller: orderData.seller_id,order: record.id})
   } else {
-    record = await pb.collection("orders").create(orderData.buyer_id);
+    record = await pb.collection("orders").create(orderData);
   }
 
   return record;

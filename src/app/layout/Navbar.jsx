@@ -67,8 +67,8 @@ function DefaultNavbar() {
 
             {/* WAS LOGIN */}
             {isAuthenticated && (
-              <div className="flex gap-2 justify-start items-center">
-                <div className="wishlist">
+              <div className="flex gap-2 justify-start items-center cursor-pointer">
+                <div className="wishlist" onClick={() => navigate("/user/watch-list")}>
                   <Heart />
                 </div>
                 <NavDropdown title={user.name} id="basic-nav-dropdown">

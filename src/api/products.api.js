@@ -1,10 +1,57 @@
 import pb from "./config";
 
-export const getAllProductsAPI = async (sort = "-created,id") => {
-  const records = await pb.collection('products').getList(1, 50, {
-    filter: `product_status = 0`,
-    sort: sort
-});
+export const getAllProductsAPI = async (
+  filter = null,
+  sort = {sortType: "DESC", sortKind: "created"},
+  
+) => {
+  let records;
+  let filterData = `product_status = 0`;
+  let sortData ="";
+
+  //handle filter
+  if (filter !== null) {
+    if (filter.search !== "") {
+      filterData += `&& name ~ "${filter.search}"`;
+    }
+    if (filter.categories !== "label") {
+      filterData += `&& categories = "${filter.categories}"`;
+    }
+    if (filter.fixPrice !== "label") {
+      filterData += `&& is_fix_price = ${filter.fixPrice}`;
+
+      if (filter.fixPrice === "false") {
+        if (filter.minDate !== "") {
+          filterData += `&& time_closing >= "${filter.minDate}"`;
+        }
+        if (filter.maxDate !== "") {
+          filterData += `&& time_closing <= "${filter.maxDate}"`;
+        }
+      }
+    }
+    if (filter.minPrice !== 0) {
+      filterData += `&& minium_price >= "${filter.minPrice}"`;
+    }
+    if (filter.maxPrice !== 0) {
+      filterData += `&& minium_price <= "${filter.maxPrice}"`;
+    }
+  }
+
+  //handle sort
+  if (sort.sortType === "DESC") {
+    sortData += "-";
+  } else if(sort.sortType === "ASC") {
+    sortData += "+";
+  }
+
+  sortData += sort.sortKind;
+
+  // API
+  records = await pb.collection("productsView").getList(1, 50, {
+    filter: filterData,
+    sort: sortData,
+    expand: "current_buyer, seller, categories"
+  });
 
   return records.items;
 };
@@ -35,7 +82,7 @@ export const addProductAPI = async (productData) => {
     time_closing: productData.time_closing,
   };
 
-  const record = await pb.collection("products").create(data);
+  const record = await pb.collection("products").create(data, {expand: "seller, categories"});
 
   return record;
 };
@@ -47,7 +94,7 @@ export const updateProductAPI = async (productId, updateData) => {
       .collection("products")
       .update(productId, { ...updateData, time_closing: null });
   } else {
-    record = await pb.collection("products").update(productId, updateData);
+    record = await pb.collection("products").update(productId, updateData, {expand: "seller, categories"});
   }
 
   return record;
@@ -84,23 +131,12 @@ export const addUserToWishlistAPI = async (productId, userId, wishListOf) => {
 };
 
 export const getWatchListAPI = async (userId) => {
-  const records = await pb.collection("products").getList(1, 50, {
+  const records = await pb.collection("productsView").getList(1, 50, {
     filter: `wish_list_of ~ "${userId}"`,
+    expand: "current_buyer, seller, categories"
   });
 
-  const products = records.items.map((product) => ({
-    id: product.id,
-    product_image: product.product_image,
-    name: product.name,
-    description: product.description,
-    is_fix_price: product.is_fix_price,
-    minium_price: product.minium_price,
-    seller: product.seller,
-    category: product.categories,
-    wish_list_of: product.wish_list_of,
-  }));
-
-  return products;
+  return records.items;
 };
 
 export const getProductToDateAPI = async () => {

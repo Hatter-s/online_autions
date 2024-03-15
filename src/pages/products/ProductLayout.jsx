@@ -2,14 +2,16 @@ import Layout from "@/app/layout/Layout";
 import { Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import { getAllCategories } from "./categoriesSlice";
-import { getAllProducts } from "./productsSlice";
-import { useDispatch } from "react-redux";
+import { getAllProducts, selectProductFilter, selectProductSort } from "./productsSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const ProductsLayout = () => {
   const dispatch = useDispatch();
+  const productFilter = useSelector(selectProductFilter);
+  const productSort = useSelector(selectProductSort);
 
   useEffect(() => {
-    dispatch(getAllProducts());
+    dispatch(getAllProducts({filter: productFilter, sort: productSort}));
     dispatch(getAllCategories());
 
   }, [dispatch])
