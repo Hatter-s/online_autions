@@ -42,7 +42,7 @@ const UpdateProduct = () => {
 
   useEffect(() => {
     if (product) {
-      setCategory(product.category);
+      setCategory(product.categories);
       setName(product.name);
       //   setImage(getImageByUrl("products", product.id, product.product_image));
       setPreviewSrc(

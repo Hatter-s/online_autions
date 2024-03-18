@@ -4,10 +4,10 @@ import { selectUserId } from "../userSlice";
 
 import ButtonPrimary from "@/components/UI/ButtonPrimary";
 import { useNavigate } from "react-router-dom";
-import { selectProducts, getWatchList } from "../../products/productsSlice";
+import { selectProducts, getWatchList, removeUserToWishlist } from "../../products/productsSlice";
 import { remainDate } from "@/utils";
 
-import { Row, Card, Col } from "react-bootstrap";
+import { Row, Card, Col, CloseButton } from "react-bootstrap";
 
 const WatchList = () => {
   const dispatch = useDispatch();
@@ -54,7 +54,8 @@ const WatchList = () => {
         >
           {products.map((product) => (
             <Col key={product.id} className="flex flex-col">
-              <Card className="flex-1">
+              <Card className="flex-1 relative">
+                <CloseButton className=" absolute right-4 top-4" onClick={() => dispatch(removeUserToWishlist({productId: product.id, userId}))} />
                 <Card.Img
                   variant="top"
                   src={`${import.meta.env.VITE_FILE_URL}/products/${

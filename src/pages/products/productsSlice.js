@@ -13,6 +13,7 @@ import {
   updateProductAPI,
   getProductBySellerIdAPI,
   addUserToWishlistAPI,
+  removeUserToWishlistAPI,
   getWatchListAPI,
 } from "@/api";
 
@@ -152,7 +153,21 @@ export const productsSlice = createSlice({
       .addCase(addUserToWishlist.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
+      })
+
+      .addCase(removeUserToWishlist.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(removeUserToWishlist.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.products = state.products.filter(product => product.id !== action.payload.id);
+        state.error = null;
+      })
+      .addCase(removeUserToWishlist.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
       });
+
   },
 });
 
@@ -204,6 +219,15 @@ export const addUserToWishlist = createAsyncThunk(
     return response;
   }
 );
+
+export const removeUserToWishlist = createAsyncThunk(
+  "products/removeUserToWishlist",
+  async ({ productId, userId }) => {
+    const response = await removeUserToWishlistAPI(productId, userId);
+    return response;
+  }
+);
+
 
 export const getWatchList = createAsyncThunk(
   "products/getWatchList",

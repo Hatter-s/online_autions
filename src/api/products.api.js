@@ -130,6 +130,14 @@ export const addUserToWishlistAPI = async (productId, userId, wishListOf) => {
   return product;
 };
 
+export const removeUserToWishlistAPI = async (productId, userId) => {
+  const record = await pb.collection('products').update(productId, {
+    "wish_list_of-" : userId
+  });
+
+  return record;
+}
+
 export const getWatchListAPI = async (userId) => {
   const records = await pb.collection("productsView").getList(1, 50, {
     filter: `wish_list_of ~ "${userId}"`,

@@ -44,7 +44,7 @@ const Register = () => {
             }}
           >
             <Form.Group className="mb-3" controlId="formBasicUsername">
-              <Form.Label>Username</Form.Label>
+              <Form.Label>Username <span className=" text-red-500">**</span></Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Enter username"
@@ -54,7 +54,7 @@ const Register = () => {
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Email</Form.Label>
+              <Form.Label>Email <span className=" text-red-500">**</span></Form.Label>
               <Form.Control
                 type="email"
                 placeholder="Enter email"
@@ -64,17 +64,18 @@ const Register = () => {
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
+              <Form.Label>Password <span className=" text-red-500">**</span></Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+              <Form.Text>Password need at least contain 8 characters, 1 number and 1 special character</Form.Text>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPasswordConfirm">
-              <Form.Label>Password Confirm</Form.Label>
+              <Form.Label>Password Confirm <span className=" text-red-500">**</span></Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Password Confirm"

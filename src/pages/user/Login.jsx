@@ -58,9 +58,6 @@ const Login = () => {
                 </Link>
               </Form.Text>
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicCheckbox">
-              <Form.Check type="checkbox" label="Check me out" />
-            </Form.Group>
             <button type="submit" className="bg-gradient-to-r from-cyan-400 to-blue-400 text-white py-2 px-3 rounded-lg mx-auto block shadow-sm shadow-sky-700">
               Login
             </button>

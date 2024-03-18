@@ -75,7 +75,7 @@ const AddProduct = () => {
 
       <Form onSubmit={(e) => handleSubmit(e)} className="mb-10">
         <Form.Group className="mb-3" controlId="formProductImage">
-          <Form.Label>Product Image</Form.Label>
+          <Form.Label aria-required="true">Product Image <span className=" text-red-500">**</span></Form.Label>
           <Form.Control
             type="file"
             accept="image/*"
@@ -94,7 +94,7 @@ const AddProduct = () => {
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formName">
-          <Form.Label>Name</Form.Label>
+          <Form.Label>Name <span className=" text-red-500">**</span></Form.Label>
           <Form.Control
             type="text"
             placeholder="Name"
@@ -105,7 +105,7 @@ const AddProduct = () => {
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasePrice">
-          <Form.Label>Base Price</Form.Label>
+          <Form.Label>Base Price <span className=" text-red-500">**</span></Form.Label>
           <Form.Control
             type="number"
             placeholder="Base price"
@@ -117,7 +117,7 @@ const AddProduct = () => {
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formCategory">
-          <Form.Label>Category</Form.Label>
+          <Form.Label>Category <span className=" text-red-500">**</span></Form.Label>
           <Form.Select
             className="mb-2"
             aria-label="select category"
@@ -137,7 +137,7 @@ const AddProduct = () => {
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formDescription">
-          <Form.Label>Description</Form.Label>
+          <Form.Label>Description <span className=" text-red-500">**</span></Form.Label>
           <Form.Control
             as="textarea"
             rows={3}
@@ -158,7 +158,7 @@ const AddProduct = () => {
 
         {!fixPrice && (
           <Form.Group className="mb-3" controlId="formTimeClosing">
-            <Form.Label>Time Closing</Form.Label>
+            <Form.Label>Time Closing <span className=" text-red-500">**</span></Form.Label>
 
             <Form.Control
               type="date"

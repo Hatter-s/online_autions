@@ -36,11 +36,11 @@ const BuyerOrders = (props) => {
               />
               <Card.Body className="flex flex-col gap-4 justify-between">
                 <div>
-                  <Card.Title className="">{order.id}</Card.Title>
+                  <Card.Title className="">{order.expand.product_id.name}</Card.Title>
 
                   <div className="flex flex-row gap-2">
-                    <Card.Text>Buyer:</Card.Text>
-                    <Card.Text>{order.buyer_id}</Card.Text>
+                    <Card.Text>Seller:</Card.Text>
+                    <Card.Text>{order.expand.seller_id.name}</Card.Text>
                   </div>
                   {order.is_fix_price && (
                     <div className="flex flex-row gap-2">
